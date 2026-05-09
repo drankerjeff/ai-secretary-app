@@ -1,26 +1,214 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+/* ============================================================
+   Apple Human Interface Guidelines — Dark Theme Design Tokens
+   ============================================================ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* --- Backgrounds (layered elevation model) ---
+     iOS dark: System Background → Secondary → Tertiary */
+  --background:           #000000;  /* System Background (OLED black) */
+  --background-elevated:  #1C1C1E;  /* Cards, sheets, popovers */
+  --background-secondary: #2C2C2E;  /* Grouped content, sidebars */
+  --background-tertiary:  #3A3A3C;  /* Inset groups, input areas */
+
+  /* --- Labels (Apple semantic text colors) --- */
+  --foreground:           rgba(255, 255, 255, 1.0);   /* Primary label */
+  --foreground-secondary: rgba(235, 235, 245, 0.6);   /* Secondary label */
+  --foreground-tertiary:  rgba(235, 235, 245, 0.3);   /* Tertiary label */
+  --foreground-quaternary:rgba(235, 235, 245, 0.18);  /* Quaternary label */
+
+  /* --- System Colors (Apple HIG dark variants) --- */
+  --primary:              #0A84FF;  /* System Blue */
+  --primary-foreground:   #FFFFFF;
+  --accent:               #0A84FF;  /* Alias for primary */
+  --accent-foreground:    #FFFFFF;
+
+  --secondary:            #636366;  /* System Gray */
+  --secondary-foreground: rgba(235, 235, 245, 0.6);
+
+  --destructive:          #FF453A;  /* System Red */
+  --destructive-foreground: #FFFFFF;
+
+  --success:              #30D158;  /* System Green */
+  --success-foreground:   #FFFFFF;
+
+  --warning:              #FFD60A;  /* System Yellow */
+  --warning-foreground:   #000000;
+
+  /* --- Fills (for UI elements like buttons, controls) --- */
+  --fill:           rgba(120, 120, 128, 0.36);  /* Primary fill */
+  --fill-secondary: rgba(120, 120, 128, 0.32);  /* Secondary fill */
+  --fill-tertiary:  rgba(118, 118, 128, 0.24);  /* Tertiary fill */
+  --fill-quaternary:rgba(116, 116, 128, 0.18);  /* Quaternary fill */
+
+  /* --- Muted (for disabled states, placeholders) --- */
+  --muted:            #2C2C2E;
+  --muted-foreground: rgba(235, 235, 245, 0.45);
+
+  /* --- Borders & Separators --- */
+  --border:        rgba(84, 84, 88, 0.65);  /* Opaque separator */
+  --border-subtle: rgba(84, 84, 88, 0.36);  /* Non-opaque separator */
+
+  /* --- Focus Ring --- */
+  --ring: #0A84FF;
+
+  /* --- Glass / vibrancy surfaces --- */
+  --glass-bg:      rgba(28, 28, 30, 0.72);
+  --glass-dark-bg: rgba(0, 0, 0, 0.6);
+
+  /* --- Selection highlight --- */
+  --selection-bg: rgba(10, 132, 255, 0.3);
+
+  /* --- Border Radius (Apple HIG: 10px controls, 14px cards, 20px modals) --- */
+  --radius-sm:   6px;
+  --radius:      10px;
+  --radius-lg:   14px;
+  --radius-xl:   20px;
+  --radius-2xl:  28px;
+  --radius-full: 9999px;
+
+  /* --- Gradient stops (for text & background gradients) --- */
+  --gradient-white-dim: rgba(255, 255, 255, 0.6);
+  --color-system-teal:  #5AC8FA;  /* Apple System Teal (light) */
+
+  /* --- Shadows (elevated surfaces in dark UI need stronger shadows) --- */
+  --shadow-sm:           0 1px 3px rgba(0, 0, 0, 0.6),
+                         0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow:              0 4px 16px rgba(0, 0, 0, 0.6),
+                         0 2px 4px rgba(0, 0, 0, 0.4);
+  --shadow-lg:           0 8px 32px rgba(0, 0, 0, 0.7),
+                         0 4px 8px rgba(0, 0, 0, 0.5);
+  --shadow-xl:           0 16px 48px rgba(0, 0, 0, 0.8),
+                         0 8px 16px rgba(0, 0, 0, 0.6);
+  --shadow-primary-glow: 0 0 20px rgba(10, 132, 255, 0.35),
+                         0 0 8px rgba(10, 132, 255, 0.2);
+  --shadow-inset:        inset 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ============================================================
+   Base Styles
+   ============================================================ */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    border-color: var(--border);
+    box-sizing: border-box;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  html {
+    /* Smooth scrolling */
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    /* Apple system font stack — set here as fallback for non-Tailwind elements */
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
+    /* Retina-quality text rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+  }
+
+  /* Scrollbar styling (Apple-like, minimal) */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--fill);
+    border-radius: var(--radius-full);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--fill-secondary);
+  }
+
+  /* Focus visible — Apple-style blue ring */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Remove default focus ring for mouse users */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Selection */
+  ::selection {
+    background-color: var(--selection-bg);
+    color: var(--foreground);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ============================================================
+   Utility Layer — Apple-specific helpers
+   ============================================================ */
+/* ============================================================
+   Keyframe Animations
+   ============================================================ */
+@keyframes slide-in-left {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+
+@layer utilities {
+  /* Frosted glass / vibrancy effect */
+  .apple-glass {
+    background-color: var(--glass-bg);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .apple-glass-dark {
+    background-color: var(--glass-dark-bg);
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    border: 1px solid var(--border-subtle);
+  }
+
+  /* Elevated card surface */
+  .apple-card {
+    background-color: var(--background-elevated);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow);
+  }
+
+  /* Subtle inner shadow for inset sections */
+  .apple-inset {
+    background-color: var(--background-tertiary);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-inset);
+  }
+
+  /* Text gradient (for hero/highlight text) */
+  .text-gradient-primary {
+    background: linear-gradient(135deg, var(--foreground) 0%, var(--gradient-white-dim) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Mobile sidebar slide-in */
+  .animate-slide-in-left {
+    animation: slide-in-left 220ms cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+
+  .text-gradient-blue {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--color-system-teal) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 }

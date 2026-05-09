@@ -1,0 +1,45 @@
+import * as React from 'react'
+
+export interface SpinnerProps {
+  size?: 'sm' | 'md' | 'lg'
+  color?: 'primary' | 'foreground' | 'muted'
+  className?: string
+}
+
+const sizeMap: Record<NonNullable<SpinnerProps['size']>, string> = {
+  sm: 'h-4 w-4 border-2',
+  md: 'h-6 w-6 border-2',
+  lg: 'h-8 w-8 border-[3px]',
+}
+
+const colorMap: Record<NonNullable<SpinnerProps['color']>, string> = {
+  primary: 'border-primary/30 border-t-primary',
+  foreground: 'border-foreground/20 border-t-foreground',
+  muted: 'border-muted-foreground/20 border-t-muted-foreground',
+}
+
+const Spinner = React.forwardRef<HTMLSpanElement, SpinnerProps>(
+  ({ size = 'md', color = 'primary', className = '' }, ref) => {
+    return (
+      <span
+        ref={ref}
+        role="status"
+        aria-label="Loading"
+        className={`inline-flex items-center justify-center ${className}`}
+      >
+        <span
+          className={[
+            'rounded-full animate-spin',
+            sizeMap[size],
+            colorMap[color],
+          ].join(' ')}
+        />
+        <span className="sr-only">Loading...</span>
+      </span>
+    )
+  }
+)
+
+Spinner.displayName = 'Spinner'
+
+export { Spinner }
