@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useAuth } from '@/lib/auth/AuthContext'
 import { Spinner } from '@/components/ui/Spinner'
 import { Alert } from '@/components/ui/Alert'
@@ -32,8 +32,12 @@ function IconGoogle() {
 export default function LoginPage() {
   const { user, isLoading, signIn } = useAuth()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [signingIn, setSigningIn] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(
+    // コールバックルートからのエラーを初期値に設定
+    searchParams.get('error')
+  )
 
   // 認証済みならダッシュボードへ
   useEffect(() => {
