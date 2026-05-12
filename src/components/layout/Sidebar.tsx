@@ -58,12 +58,33 @@ function IconSearch() {
   )
 }
 
+function IconBranch() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <line x1="6" y1="3" x2="6" y2="15" />
+      <circle cx="18" cy="6" r="3" />
+      <circle cx="6" cy="18" r="3" />
+      <path d="M18 9a9 9 0 0 1-9 9" />
+    </svg>
+  )
+}
+
+function IconPublish() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <polyline points="16 16 12 12 8 16" />
+      <line x1="12" y1="12" x2="12" y2="21" />
+      <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
+    </svg>
+  )
+}
+
 
 // ---- Nav structure ----
 
 interface NavGroup {
   label?: string
-  items: { href: string; label: string; icon: React.ReactNode; badge?: string | number }[]
+  items: { href: string; label: string; icon: React.ReactNode; badge?: string | number; exact?: boolean }[]
 }
 
 const NAV_GROUPS: NavGroup[] = [
@@ -82,6 +103,13 @@ const NAV_GROUPS: NavGroup[] = [
       { href: '/dashboard/documents/research', label: 'リサーチ', icon: <IconSearch /> },
     ],
   },
+  {
+    label: '開発',
+    items: [
+      { href: '/dashboard/branches', label: 'Branch管理', icon: <IconBranch />, exact: true },
+      { href: '/dashboard/branches/publish', label: 'Branchの発行', icon: <IconPublish /> },
+    ],
+  },
 ]
 
 // ---- Sidebar ----
@@ -93,8 +121,8 @@ interface SidebarProps {
 export function Sidebar({ onNavigate }: SidebarProps) {
   const pathname = usePathname()
 
-  const isActive = (href: string) => {
-    if (href === '/dashboard') return pathname === '/dashboard'
+  const isActive = (href: string, exact?: boolean) => {
+    if (href === '/dashboard' || exact) return pathname === href
     return pathname.startsWith(href)
   }
 
@@ -132,7 +160,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
                     label={item.label}
                     icon={item.icon}
                     badge={item.badge}
-                    isActive={isActive(item.href)}
+                    isActive={isActive(item.href, item.exact)}
                     onClick={onNavigate}
                   />
                 </li>
