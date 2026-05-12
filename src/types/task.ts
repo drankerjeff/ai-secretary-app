@@ -13,10 +13,18 @@ export interface Task {
   updated_at: string
 }
 
+export type TaskSort =
+  | 'created_desc'
+  | 'due_asc'
+  | 'due_desc'
+  | 'priority_desc'
+
 export interface TaskFilters {
   status: 'all' | TaskStatus
   priority: 'all' | Priority
   due: 'all' | 'today' | 'week' | 'overdue'
+  search: string
+  sort: TaskSort
 }
 
 export interface TaskInput {

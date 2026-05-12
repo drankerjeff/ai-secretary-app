@@ -27,6 +27,8 @@ const DEFAULT_FILTERS: TaskFilters = {
   status: 'all',
   priority: 'all',
   due: 'all',
+  search: '',
+  sort: 'created_desc',
 }
 
 const TaskContext = createContext<TaskContextType | undefined>(undefined)
