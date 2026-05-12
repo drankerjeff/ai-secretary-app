@@ -1,10 +1,17 @@
 # UI Component Visual Specification
 ## AI Secretary — Apple HIG Dark Theme
 
-**Design System Version:** 1.0
-**Last Updated:** 2026-04-23
+**Design System Version:** 1.1
+**Last Updated:** 2026-05-12
 **Theme:** Always-dark (OLED-optimized, Apple Human Interface Guidelines)
 **Audience:** Developers implementing these components
+
+### Changelog (v1.0 → v1.1)
+- Alert `info` type corrected: was `bg-primary/10 border-primary/30 text-primary`; must now use `--info` (#64D2FF System Cyan) tokens
+- `--overlay` token documented as the canonical value for modal backdrops
+- Animation utility classes (`animate-fade-in`, `animate-slide-up`, `animate-scale-in`, `animate-slide-in-left`) mapped to specific components
+- `--info` / `--info-foreground` color tokens added to design system token table
+- Apple HIG compliance checklist added at end of document
 
 ---
 
@@ -15,10 +22,83 @@ Before implementing any component, internalize these constraints:
 - **Minimum interactive target:** 44×44pt (Apple HIG non-negotiable)
 - **Base transition:** `duration-250 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]` — always apply this to interactive elements; do not use `ease-in-out` or `ease` as substitutes
 - **Focus ring:** `outline outline-2 outline-offset-2 outline-ring` on `:focus-visible` — already set globally but components must not suppress it
-- **No raw color values in components.** Every color must come from a design token (CSS variable via Tailwind class). No `#0A84FF` hardcoded in JSX.
+- **No raw color values in components.** Every color must come from a design token (CSS variable via Tailwind class). No `#0A84FF`, `#64D2FF`, or any hex value hardcoded in JSX.
 - **Typography:** Use the Apple HIG type scale classes (`text-caption2` through `text-largetitle`). Do not use raw `text-sm`, `text-base`, etc.
 - **Spacing grid:** 4px base unit. All padding/margin/gap values must be multiples of 4px (Tailwind: `p-1`=4px, `p-2`=8px, `p-3`=12px, `p-4`=16px, etc.)
 - **Font rendering:** The body already sets `-webkit-font-smoothing: antialiased`. No need to reapply per-component.
+
+---
+
+## Color Token Reference
+
+All tokens are CSS variables defined in `globals.css`. Tailwind classes map to these via `tailwind.config.ts`. **Never use raw hex values.**
+
+| Token | CSS Variable | Value | Semantic meaning |
+|-------|-------------|-------|-----------------|
+| `bg-background` | `--background` | `#000000` | OLED black page base |
+| `bg-background-elevated` | `--background-elevated` | `#1C1C1E` | Cards, sheets, popovers |
+| `bg-background-secondary` | `--background-secondary` | `#2C2C2E` | Grouped content, sidebars |
+| `bg-background-tertiary` | `--background-tertiary` | `#3A3A3C` | Inset groups, input areas |
+| `text-foreground` | `--foreground` | `rgba(255,255,255,1.00)` | Primary label |
+| `text-foreground-secondary` | `--foreground-secondary` | `rgba(235,235,245,0.60)` | Secondary label |
+| `text-foreground-tertiary` | `--foreground-tertiary` | `rgba(235,235,245,0.30)` | Tertiary label |
+| `text-foreground-quaternary` | `--foreground-quaternary` | `rgba(235,235,245,0.18)` | Quaternary label |
+| `text-primary` / `bg-primary` | `--primary` | `#0A84FF` | System Blue — primary actions |
+| `text-success` / `bg-success` | `--success` | `#30D158` | System Green — success states |
+| `text-warning` / `bg-warning` | `--warning` | `#FFD60A` | System Yellow — warnings |
+| `text-destructive` / `bg-destructive` | `--destructive` | `#FF453A` | System Red — errors, destructive |
+| `text-info` / `bg-info` | `--info` | `#64D2FF` | System Cyan — informational; distinct from primary blue |
+| `bg-fill` | `--fill` | `rgba(120,120,128,0.36)` | Control fills |
+| `bg-fill-secondary` | `--fill-secondary` | `rgba(120,120,128,0.32)` | Secondary fills |
+| `bg-fill-tertiary` | `--fill-tertiary` | `rgba(118,118,128,0.24)` | Tertiary fills |
+| `bg-fill-quaternary` | `--fill-quaternary` | `rgba(116,116,128,0.18)` | Quaternary fills |
+| `bg-overlay` | `--overlay` | `rgba(0,0,0,0.60)` | Modal/sheet backdrops |
+| `border-border` | `--border` | `rgba(84,84,88,0.65)` | Standard separator |
+| `border-border-subtle` | `--border-subtle` | `rgba(84,84,88,0.36)` | Subtle separator |
+| `bg-muted` | `--muted` | `#2C2C2E` | Disabled backgrounds |
+
+### Info vs. Primary: When to Use Each
+
+`--primary` (#0A84FF System Blue) and `--info` (#64D2FF System Cyan) are intentionally distinct:
+
+- Use `--primary` for interactive elements that demand action: CTA buttons, active tab indicators, focus rings, selected states.
+- Use `--info` for passive informational content: informational alerts, status badges, help tooltips, contextual callouts. The user reads info but is not required to act on it.
+- Never substitute one for the other. The visual distinction (blue vs. cyan) communicates intent.
+
+---
+
+## Animation Token Reference
+
+All animation utilities are defined in `globals.css` under `@layer utilities` and as keyframes at the document level. Apply them as Tailwind class names.
+
+| Class | Keyframe | Duration | Easing | Purpose |
+|-------|----------|----------|--------|---------|
+| `animate-fade-in` | `fade-in` | 200ms | `cubic-bezier(0.25,0.46,0.45,0.94)` (apple-ease) | Subtle appearance: tooltips, inline alerts, badge additions |
+| `animate-slide-up` | `slide-up` | 300ms | `cubic-bezier(0.16,1,0.3,1)` (spring) | Upward entry: bottom sheets, toast notifications, dropdown panels |
+| `animate-scale-in` | `scale-in` | 200ms | `cubic-bezier(0.34,1.56,0.64,1)` (overshoot spring) | Popover/modal panel entry, scale-up reveals |
+| `animate-slide-in-left` | `slide-in-left` | 220ms | `cubic-bezier(0.25,0.46,0.45,0.94)` (apple-ease) | Sidebar and drawer entry from left edge |
+
+### Animation Assignment by Component
+
+| Component | Recommended Animation | Trigger |
+|-----------|----------------------|---------|
+| Alert (inline, appearing) | `animate-fade-in` | Mount / show |
+| Alert (dismissible, exit) | Reverse via `opacity-0 max-h-0` CSS transition (not a keyframe animation) | Dismiss button |
+| Modal overlay | `animate-fade-in` | Open |
+| Modal panel (desktop) | `animate-scale-in` | Open |
+| Modal panel (mobile bottom sheet) | `animate-slide-up` | Open |
+| Select dropdown panel | `animate-slide-up` (shortened — override duration to 200ms inline) | Open trigger |
+| Badge (appear) | `animate-scale-in` | Dynamic addition |
+| Badge dismissible (exit) | CSS `opacity-0 scale-75 duration-200` transition | Dismiss |
+| Tabs content panel | CSS `opacity-0 → opacity-100 duration-200` transition (not a keyframe) | Tab change |
+| Sidebar / drawer | `animate-slide-in-left` | Open on mobile |
+| Toast notification | `animate-slide-up` | Appear |
+
+**Rules for animation usage:**
+- Do not stack multiple animation classes on a single element simultaneously.
+- Exit animations must always be CSS transitions (not keyframe `animation` classes) because keyframes cannot run in reverse on unmount without JavaScript orchestration.
+- For elements that enter and exit repeatedly (alerts, toasts), prefer CSS `transition` + toggled classes over `animation` utilities to avoid re-triggering on re-render.
+- Motion reduction: wrap all animations in a `prefers-reduced-motion` check. In Tailwind, use the `motion-safe:` prefix variant: `motion-safe:animate-fade-in`.
 
 ---
 
@@ -32,13 +112,14 @@ Buttons are the primary call-to-action surface. They come in five behavioral var
 #### Primary
 The highest-emphasis action on any surface. Reserved for a single dominant action per view.
 
-- **Background:** `bg-primary` (`#0A84FF`)
+- **Background:** `bg-primary` (`--primary`, #0A84FF)
 - **Text:** `text-primary-foreground` (`#FFFFFF`), `text-callout font-semibold`
 - **Shape:** Full pill — `rounded-full`
 - **Shadow:** `shadow-primary-glow` at rest; remove on press
 - **Hover:** `opacity-90` with `shadow-primary-glow` retained
 - **Active/Pressed:** `opacity-75`, scale down to `scale-[0.97]`, shadow removed
 - **Transition:** `transition-all duration-250 ease-apple-ease`
+- **Animation on mount:** None — buttons do not animate in; they are always present
 
 Apple HIG note: The `rounded-full` pill shape is the canonical Apple CTA shape (see SF Symbols buttons, iOS action buttons). Use it only for Primary. All other variants use `rounded-lg`.
 
@@ -76,7 +157,7 @@ Invisible at rest. For tertiary inline actions (e.g. "View all", icon-only toolb
 #### Destructive
 Irreversible or dangerous actions: delete, remove, revoke. Visually distinct at all times.
 
-- **Background:** `bg-destructive` (`#FF453A`)
+- **Background:** `bg-destructive` (`--destructive`, #FF453A)
 - **Text:** `text-destructive-foreground` (`#FFFFFF`), `text-callout font-semibold`
 - **Shape:** `rounded-full` (same as Primary — it is a primary-weight action, just dangerous)
 - **Shadow:** None at rest (avoids glamorizing a destructive action)
@@ -173,7 +254,7 @@ Standard single-line text entry. No icons.
 - Suffix toggle icon: eye / eye-slash at 16px, `text-foreground-tertiary`
 - `pr-10` on field to accommodate icon
 - Toggle switches `type` between `password` and `text`
-- Icon button is Ghost variant, not styled as a Button component — it is an `<button>` with icon inside the field
+- Icon button is Ghost variant, not styled as a Button component — it is a `<button>` with icon inside the field
 
 ### Label Behavior
 - Always render a `<label>` element connected via `htmlFor` / `id`
@@ -234,6 +315,10 @@ Cards that navigate to another view or trigger an action should feel pressable:
 - The entire card is the hit target; do not add a nested "click here" button inside a clickable card
 - `tabIndex={0}` + `role="button"` + keyboard Enter/Space handlers for accessibility
 
+### Animation
+- When a card appears as part of a list being populated (e.g. search results, task list render): `motion-safe:animate-fade-in`
+- Do not animate cards that are always present on page load
+
 ### Sizing
 Cards have no fixed width — they expand to fill their container. Use grid or flex on the parent to control layout. Internal content controls height.
 
@@ -253,7 +338,7 @@ Cards can be nested. An inner card inside an outer card should use `bg-backgroun
 Modals (sheets) interrupt the user's current task to present focused content or require a decision. In Apple HIG terms, they map to "sheets" and "alerts". They float above the overlay on the `bg-background-elevated` surface with `rounded-xl` corners.
 
 ### Overlay
-- **Color:** `bg-black/60` (60% black overlay)
+- **Color:** `bg-overlay` — use the `--overlay` token (`rgba(0,0,0,0.60)`), **not** a raw `bg-black/60`. The token is the canonical value; using it ensures any future overlay adjustment propagates everywhere.
 - **Backdrop:** `backdrop-blur-apple` (20px blur) — gives the frosted "everything behind is still visible but muted" feel
 - **z-index:** Overlay at `z-40`, modal panel at `z-50`
 - **Dismiss on click:** Clicking the overlay dismisses the modal (standard sheet behavior). This must be togglable via a prop for critical confirmations.
@@ -268,12 +353,12 @@ Modals (sheets) interrupt the user's current task to present focused content or 
 ### Animation
 
 **Open (enter):**
-- Overlay: `opacity-0` to `opacity-100`, `duration-250 ease-apple-ease`
-- Panel (desktop): `opacity-0 scale-95` to `opacity-100 scale-100`, `duration-250 ease-apple-spring` (spring easing gives the "plop down" feel)
-- Panel (mobile bottom sheet): `translateY(100%)` to `translateY(0)`, `duration-350 ease-apple-spring`
+- Overlay: `motion-safe:animate-fade-in` (`duration-250 ease-apple-ease`)
+- Panel (desktop): `motion-safe:animate-scale-in` (`duration-200`, overshoot spring — gives the "plop down" feel)
+- Panel (mobile bottom sheet): `motion-safe:animate-slide-up` (`duration-300`, spring easing)
 
 **Close (exit):**
-- Reverse of enter. Use `duration-200` (exit is faster than enter — Apple convention)
+- Reverse of enter via CSS transitions (not keyframe animations). Use `duration-200` (exit is faster than enter — Apple convention).
 - Panel (desktop): `opacity-100 scale-100` to `opacity-0 scale-95`
 - Panel (mobile): `translateY(0)` to `translateY(100%)`
 
@@ -330,43 +415,75 @@ Alerts surface contextual feedback within the page — inline below a form, at t
 ### Base Anatomy
 - **Container:** `rounded-lg border px-4 py-3` (14px radius, 16px/12px padding)
 - **Layout:** `flex items-start gap-3`
-- **Icon:** 20px, vertically aligned with first line of text (`mt-0.5` to optically center with the title's cap height)
-- **Content:** flex-1, contains title and optional description
-- **Dismiss button:** Optional, right-aligned Ghost icon-only button (X, 16px)
+- **Left accent bar:** `absolute left-0 top-0 bottom-0 w-1 rounded-l-lg` — color driven by the type's accent token (see below)
+- **Icon:** 18–20px, vertically aligned with first line of text (`mt-0.5 shrink-0`)
+- **Content:** `flex-1 min-w-0`, contains title and description
+- **Dismiss button:** Optional, right-aligned Ghost icon-only button (X, 16px), `min-w-[44px] min-h-[44px]`
 
 ### Types
 
-#### Info
-- **Background:** `bg-primary/10` (primary at 10% opacity — not a design token but derived from `--primary`)
-- **Border:** `border-primary/30`
-- **Icon:** Info circle, `text-primary`
-- **Title:** `text-subheadline font-semibold text-foreground`
-- **Description:** `text-footnote text-foreground-secondary`
+#### Info — UPDATED IN v1.1
+The `info` type previously used `--primary` (System Blue). **It must now use `--info` (System Cyan, #64D2FF).** The distinction matters: primary blue signals an actionable element; cyan signals a passive informational message. Do not revert this.
+
+- **Background:** `bg-info/10`
+- **Border:** `border-info/30`
+- **Left accent bar:** `bg-info`
+- **Icon color:** `text-info`
+- **Icon:** Info circle (SVG), `width="18" height="18"`
+- **Title:** `text-subheadline font-semibold` — color inherits from the container's `text-info` class
+- **Description:** `text-footnote opacity-90` — inherits color; the opacity reduction ensures the description reads as secondary to the title
+- **ARIA role:** `role="status"` + `aria-live="polite"` (info is non-urgent)
+
+**What changed in the implementation:**
+The current `Alert.tsx` sets `container: 'bg-primary/10 border-primary/30 text-primary'` for the `info` type. The implementing agent must change this to `bg-info/10 border-info/30 text-info` and update the accent from `bg-primary` to `bg-info`. No other structural changes are needed.
 
 #### Success
 - **Background:** `bg-success/10`
 - **Border:** `border-success/30`
-- **Icon:** Checkmark circle, `text-success`
-- **Title/Description:** same as Info
+- **Left accent bar:** `bg-success`
+- **Icon color:** `text-success`
+- **Icon:** Checkmark circle (SVG), `width="18" height="18"`
+- **Title/Description:** same pattern as Info
+- **ARIA role:** `role="status"` + `aria-live="polite"` (success is non-urgent)
 
 #### Warning
 - **Background:** `bg-warning/10`
 - **Border:** `border-warning/30`
-- **Icon:** Exclamation triangle, `text-warning`
-- **Title/Description:** same as Info
-- Note: warning text on the dark warning background has low contrast — always ensure title uses `text-foreground` (white), not `text-warning`
+- **Left accent bar:** `bg-warning`
+- **Icon color:** `text-warning` — note: the warning icon itself uses the yellow token; the container class should use `text-warning-foreground` for body text to ensure contrast on the dark background
+- **Icon:** Exclamation triangle (SVG), `width="18" height="18"`
+- **Title:** `text-subheadline font-semibold text-foreground` (explicitly white — `--warning` yellow text on dark would pass contrast, but using `text-foreground` ensures higher contrast ratio)
+- **Description:** `text-footnote opacity-90 text-foreground-secondary`
+- **ARIA role:** `role="alert"` + `aria-live="assertive"` (warning is urgent)
 
 #### Error
 - **Background:** `bg-destructive/10`
 - **Border:** `border-destructive/30`
-- **Icon:** X circle, `text-destructive`
-- **Title/Description:** same as Info
+- **Left accent bar:** `bg-destructive`
+- **Icon color:** `text-destructive`
+- **Icon:** X circle (SVG), `width="18" height="18"`
+- **Title/Description:** same as Info pattern
+- **ARIA role:** `role="alert"` + `aria-live="assertive"` (error is urgent)
+
+### Color Token Summary for Alert Types
+
+| Type | Background | Border | Accent bar | Icon + text | ARIA role |
+|------|-----------|--------|------------|-------------|-----------|
+| `info` | `bg-info/10` | `border-info/30` | `bg-info` | `text-info` | `status` / `polite` |
+| `success` | `bg-success/10` | `border-success/30` | `bg-success` | `text-success` | `status` / `polite` |
+| `warning` | `bg-warning/10` | `border-warning/30` | `bg-warning` | `text-warning` (icon), `text-foreground` (text) | `alert` / `assertive` |
+| `error` | `bg-destructive/10` | `border-destructive/30` | `bg-destructive` | `text-destructive` | `alert` / `assertive` |
 
 ### Dismissible Variant
-- Append a Ghost icon button (X, 16px) to the right
-- `ml-auto flex-shrink-0`
-- On dismiss: animate `opacity-100 max-h-[200px]` to `opacity-0 max-h-0 py-0 my-0 overflow-hidden`, `duration-250 ease-apple-ease`
-- After animation ends, remove from DOM
+- Append a Ghost icon button (X, 16px) to the right with `min-w-[44px] min-h-[44px] shrink-0 self-center`
+- `focus-visible:ring-2 focus-visible:ring-current` on the dismiss button
+- On dismiss: animate `opacity-100 max-h-[200px] py-3.5` to `opacity-0 max-h-0 py-0 overflow-hidden`, `duration-250 ease-apple-ease` via CSS transition (not a keyframe animation utility)
+- After the transition ends (`onTransitionEnd`), remove from DOM
+
+### Animation on Appearance
+- Inline alerts that appear after a user action (e.g. form submission feedback): `motion-safe:animate-fade-in`
+- Toast-style alerts (fixed position): `motion-safe:animate-slide-up`
+- Do not animate alerts that are rendered on initial page load
 
 ### Title vs. Description-only
 - If only a single line of text (no description), vertically center the icon with `items-center` instead of `items-start`
@@ -380,6 +497,7 @@ Alerts surface contextual feedback within the page — inline below a form, at t
 - Do not use Alert for loading states. Use Spinner.
 - Error alerts in forms should appear below the form submit button, not at the top of the form.
 - Use the `success` variant only after a completed action, not as a decorative element.
+- The `info` type using cyan (#64D2FF) is intentional and Apple HIG-compliant. iOS system cyan is reserved for informational UI elements (e.g. Maps callouts, Shortcuts information blocks).
 
 ---
 
@@ -413,7 +531,7 @@ Chevron-down rotates to chevron-up: `rotate-180` with `duration-250 ease-apple-e
 - **Position:** Below trigger (`top-full mt-1.5`), same width as trigger (`w-full`)
 - **Max height:** `max-h-60` (240px) with `overflow-y-auto`
 - **z-index:** `z-50`
-- **Animation:** `opacity-0 scale-95 translate-y-[-4px]` to `opacity-100 scale-100 translate-y-0`, `duration-200 ease-apple-ease`
+- **Animation:** `motion-safe:animate-slide-up` on open; exit via CSS `opacity-0 scale-95 translate-y-[-4px] duration-200` transition on close
 - **Padding:** `p-1` (4px) around the option list — options have their own padding
 
 ### Option Item
@@ -428,7 +546,7 @@ Chevron-down rotates to chevron-up: `rotate-180` with `duration-250 ease-apple-e
 
 ### Searchable Variant
 - Inside the dropdown panel, above the option list: a search input field
-- **Field:** `apple-inset rounded-sm mx-1 mb-1`, `px-3 py-2`, search icon prefix (`text-foreground-tertiary`, 14px)
+- **Field:** `.apple-inset rounded-sm mx-1 mb-1`, `px-3 py-2`, search icon prefix (`text-foreground-tertiary`, 14px)
 - **Border:** none (the inset provides enough affordance)
 - The search input is focused automatically when the dropdown opens
 - Options filter as user types; no result state: `text-caption1 text-foreground-tertiary text-center py-4`
@@ -523,17 +641,23 @@ Each variant uses a tinted background with a matching text color. All background
 |---------|-----------|------|----------|
 | `default` | `bg-fill` | `text-foreground` | Neutral tags, categories |
 | `primary` | `bg-primary/15` | `text-primary` | Active filters, primary tags |
+| `info` | `bg-info/15` | `text-info` | Informational status, help context |
 | `success` | `bg-success/15` | `text-success` | Status: active, completed, online |
 | `warning` | `bg-warning/15` | `text-warning` | Status: pending, expiring |
 | `destructive` | `bg-destructive/15` | `text-destructive` | Status: error, expired, blocked |
 | `secondary` | `bg-fill-secondary` | `text-foreground-secondary` | Inactive, archived, secondary tags |
+
+**Note on `info` variant:** This variant was not present in v1.0. It is now a first-class option using the `--info` System Cyan token. Use it for badges that convey a neutral-informational status (e.g. "Beta", "New", "Info") rather than a success/warning/error state.
+
+### Animation on Appearance
+When badges are dynamically added to the DOM (e.g. a tag is applied, a count increments): `motion-safe:animate-scale-in`. This provides the characteristic "pop in" feel consistent with iOS tag/badge behavior.
 
 ### Dismissible Variant
 - Append a × icon (12px for sm/md, 14px for lg) after the label text
 - Spacing: `gap-1` between text and icon
 - The × icon is a `<button>` with `rounded-full`, `hover:bg-black/20` (darkens the badge surface slightly), `p-0.5`, `-mr-0.5`
 - The entire badge is NOT the click target — only the × is
-- On dismiss: `opacity-0 scale-75` transition `duration-200 ease-apple-ease`, then remove from DOM
+- On dismiss: CSS transition `opacity-0 scale-75 duration-200 ease-apple-ease`, then remove from DOM
 
 ### Icon + Label
 - Optionally prefix a 12px icon before the label text
@@ -544,7 +668,7 @@ Each variant uses a tinted background with a matching text color. All background
 A minimal variant: just a colored dot, no text. Used for online/offline status indicators.
 - Dimensions: `w-2 h-2` (8px) for sm, `w-2.5 h-2.5` (10px) for md
 - Shape: `rounded-full`
-- Color: use bg-{variant} directly (e.g. `bg-success`, `bg-destructive`)
+- Color: use bg-{variant} directly (e.g. `bg-success`, `bg-destructive`, `bg-info`)
 - Optionally animate with `animate-pulse` for "live" indicators
 
 ### Apple HIG Notes
@@ -659,6 +783,12 @@ Tabs allow users to switch between sibling views within the same context. In App
 - `outline-2 outline-ring outline-offset-2` on the tab item
 - Keyboard: Left/Right arrows navigate between tabs (roving tabindex pattern)
 
+### Content Panel Animation
+- Content switches with `motion-safe:animate-fade-in` (`duration-200 ease-apple-ease`) applied to the incoming panel on tab change
+- Do not slide content in/out (creates disorientation when using tabs)
+- The content panel has no fixed height — it grows to fit the selected tab's content
+- **Padding:** `pt-5` between tab list and content
+
 ### Icon Support
 - Icons sit to the left of the label: 16px, inherits tab text color
 - Icon-only tabs are permitted for compact layouts (e.g. `<3` tabs in a toolbar); always include `title` attribute for tooltip
@@ -668,12 +798,6 @@ Tabs allow users to switch between sibling views within the same context. In App
 - A count badge can appear to the right of the label: `Badge` component, variant `primary`, size `sm`
 - On active tab: badge is still `bg-primary/15 text-primary`
 - On inactive tab: badge is `bg-fill text-foreground-secondary`
-
-### Content Panel
-- Below the tab list, the content area renders the selected tab's content
-- **Padding:** `pt-5` between tab list and content
-- **Transition:** Content switches with a simple `opacity-0` to `opacity-100` fade, `duration-200 ease-apple-ease`. Do not slide content in/out (creates disorientation when using tabs).
-- The content panel has no fixed height — it grows to fit the selected tab's content
 
 ### Variants
 
@@ -747,3 +871,75 @@ Error states across Input, Textarea, Select:
 
 ### 4px Grid Compliance Check
 Before finalizing any component, verify that every padding, margin, gap, and dimension value is a multiple of 4px. Non-conforming values (e.g. 6px, 10px, 14px) are only acceptable when they match a defined design token (border radius values are token-driven and exempt).
+
+### Motion Reduction Compliance
+All animation utility classes (`animate-fade-in`, `animate-slide-up`, `animate-scale-in`, `animate-slide-in-left`) must be wrapped with the `motion-safe:` Tailwind prefix variant:
+```
+motion-safe:animate-fade-in
+motion-safe:animate-slide-up
+motion-safe:animate-scale-in
+motion-safe:animate-slide-in-left
+```
+This ensures the animations are skipped entirely when the user has "Reduce Motion" enabled in system accessibility preferences. CSS `transition` declarations used for hover/press/focus states are lower-impact and do not require this guard, but should still use short durations (≤ 250ms).
+
+---
+
+## Apple HIG Compliance Checklist
+
+Run this checklist against every component before marking it ready for production. Each item maps to a specific Apple Human Interface Guidelines requirement.
+
+### Interaction & Touch Targets
+- [ ] Every interactive element has a minimum touch target of 44×44pt (achieved visually or via invisible padding extension)
+- [ ] Tap highlight is suppressed on custom interactive elements (`-webkit-tap-highlight-color: transparent` or Tailwind `tap-transparent` where needed)
+- [ ] Swipe and gesture interactions respect platform conventions (no custom swipe gestures that conflict with iOS system gestures)
+
+### Visual Design
+- [ ] Only design tokens are used for all colors — no raw hex values, no Tailwind gray-* utilities, no arbitrary color values
+- [ ] Typography uses exclusively the Apple HIG type scale classes (`text-caption2` through `text-largetitle`)
+- [ ] All spacing values conform to the 4px grid
+- [ ] Border radius values match the design token set: 6px, 10px, 14px, 20px, 28px, or `rounded-full`
+- [ ] Dark-only: no light-mode fallbacks are needed; all tokens are calibrated for OLED black backgrounds
+- [ ] Shadows use the predefined shadow tokens (`--shadow-sm`, `--shadow`, `--shadow-lg`, `--shadow-xl`, `--shadow-primary-glow`, `--shadow-success-glow`) — no arbitrary `drop-shadow` values
+
+### Color Semantics
+- [ ] `--primary` (#0A84FF) is used only for interactive/actionable elements: buttons, links, focus rings, selected states, active indicators
+- [ ] `--info` (#64D2FF) is used only for passive informational elements: info alerts, informational badges, help callouts
+- [ ] `--success` is used only after a completed positive action, not decoratively
+- [ ] `--warning` is used for time-sensitive or potentially negative states, paired with `text-foreground` for body text to preserve contrast
+- [ ] `--destructive` is used for irreversible actions and error states only
+- [ ] The `bg-overlay` / `--overlay` token is used for all modal/sheet backdrops — not a raw `bg-black/60`
+
+### Accessibility
+- [ ] All interactive elements are keyboard-navigable and receive focus via Tab
+- [ ] Focus ring is visible on `:focus-visible` using the `--ring` token — not suppressed by any component
+- [ ] Color is not the only means of conveying information (icons accompany all Alert types; shape reinforces button hierarchy)
+- [ ] ARIA roles are correct: `role="status"` + `aria-live="polite"` for non-urgent feedback; `role="alert"` + `aria-live="assertive"` for urgent feedback
+- [ ] Icon-only buttons have `aria-label` attributes
+- [ ] Form fields have associated `<label>` elements via `htmlFor` / `id`
+- [ ] Loading spinners include `role="status"` and a visually hidden `<span className="sr-only">Loading...</span>`
+- [ ] Tab components implement the ARIA Authoring Practices Guide tab pattern (roving tabindex, arrow key navigation)
+- [ ] Dismissible elements announce removal via `aria-live` or are handled gracefully by focus management
+
+### Motion & Animation
+- [ ] All keyframe animation utilities use the `motion-safe:` prefix (`motion-safe:animate-fade-in`, etc.)
+- [ ] Enter animations use the correct utility for the context (fade for inline elements, slide-up for bottom-origin elements, scale-in for centered popover-style elements)
+- [ ] Exit animations use CSS `transition` (not `animation`) to allow clean reversal
+- [ ] No animation duration exceeds 400ms (Apple HIG: UI animations should feel snappy, not cinematic)
+- [ ] `animate-spin` on Spinner components is wrapped with `motion-safe:` where possible; the Spinner is visually degraded (static circle) when motion is reduced
+
+### Component States
+- [ ] Default state is defined and implemented
+- [ ] Hover state is defined and implemented (desktop only — do not rely on hover for mobile)
+- [ ] Active/pressed state is defined and implemented
+- [ ] Focus state is defined and implemented (keyboard focus ring)
+- [ ] Disabled state is defined and implemented (`opacity-40`, `pointer-events-none`, `bg-muted` for semantic backgrounds)
+- [ ] Loading state is defined and implemented where applicable (Button, Spinner)
+- [ ] Error state is defined and implemented where applicable (Input, Textarea, Select, Alert)
+- [ ] Empty state is considered (Select with no options, tab panel with no content)
+
+### Platform Conventions
+- [ ] Bottom sheets on mobile use `rounded-t-xl rounded-b-none w-full` anchored to the bottom edge
+- [ ] Destructive actions in modals are placed on the RIGHT (Apple convention — the confirming button, even if destructive, is rightmost)
+- [ ] Cancel actions are always on the LEFT in modal footers, using the Secondary button variant
+- [ ] Dropdowns close on: option selection, outside click, and Escape key
+- [ ] Modals close on: X button click, overlay click (unless critical), and Escape key
