@@ -43,3 +43,25 @@ next-env.d.ts
 # screenshots at project root
 /*.png
 supabase/.temp/
+
+build.log
+
+git rm --cached build.log
+
+git rm --cached -r .next
+
+
+
+git rm --cached -r coverage
+
+
+git status
+
+chore: prepare repository for deployment
+
+git commit -m "chore: update gitignore"
+
+git status
+
+
+
