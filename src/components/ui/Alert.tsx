@@ -11,8 +11,8 @@ export interface AlertProps {
 
 const typeConfig = {
   info: {
-    container: 'bg-primary/10 border-primary/30 text-primary',
-    accent: 'bg-primary',
+    container: 'bg-info/10 border-info/30 text-info',
+    accent: 'bg-info',
     icon: (
       <svg
         width="18"

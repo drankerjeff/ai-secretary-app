@@ -204,7 +204,7 @@ export function Select({
                   setSearch(e.target.value)
                   setFocusedIndex(0)
                 }}
-                placeholder="Search..."
+                placeholder="検索..."
                 aria-label="Search options"
                 className={[
                   'w-full bg-background-secondary border border-border rounded-lg',

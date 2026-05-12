@@ -87,10 +87,10 @@ export function Tabs({
             onClick={() => onChange(tab.id)}
             onKeyDown={(e) => handleKeyDown(e, tab.id)}
             className={[
-              'inline-flex items-center justify-center gap-2',
+              'relative inline-flex items-center justify-center gap-2',
               'text-subheadline font-medium px-3.5 py-2 rounded',
               'min-h-[44px]',
-              'transition-all duration-250 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]',
+              'transition-all duration-200 ease-apple-ease',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
               fullWidth ? 'flex-1' : '',
               isActive
@@ -104,6 +104,13 @@ export function Tabs({
               </span>
             )}
             {tab.label}
+            {/* Active underline indicator */}
+            {isActive && (
+              <span
+                className="absolute bottom-1 left-3.5 right-3.5 h-0.5 rounded-full bg-primary animate-scale-in"
+                aria-hidden="true"
+              />
+            )}
           </button>
         )
       })}
