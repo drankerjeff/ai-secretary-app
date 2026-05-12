@@ -96,7 +96,7 @@ export function Modal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop overlay */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-apple animate-in fade-in duration-250"
+        className="absolute inset-0 bg-overlay backdrop-blur-apple animate-in fade-in duration-250"
         onClick={onClose}
         aria-hidden="true"
       />

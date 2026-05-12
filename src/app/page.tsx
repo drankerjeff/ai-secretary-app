@@ -17,7 +17,7 @@ import {
   Textarea,
 } from '@/components/ui'
 
-// ---- Icons (inline SVG helpers) ----
+// ── Icons ──────────────────────────────────────────────────
 
 function IconSearch() {
   return (
@@ -26,7 +26,6 @@ function IconSearch() {
     </svg>
   )
 }
-
 function IconPlus() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
@@ -34,7 +33,6 @@ function IconPlus() {
     </svg>
   )
 }
-
 function IconCalendar() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
@@ -42,7 +40,6 @@ function IconCalendar() {
     </svg>
   )
 }
-
 function IconMail() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
@@ -50,80 +47,111 @@ function IconMail() {
     </svg>
   )
 }
+function IconCheck() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  )
+}
 
-// ---- Toast helper ----
+// ── Primitives ─────────────────────────────────────────────
+
+function Divider() {
+  return <div className="apple-divider" aria-hidden="true" />
+}
 
 function Toast({ message, onClose }: { message: string; onClose: () => void }) {
   React.useEffect(() => {
-    const t = setTimeout(onClose, 1800)
+    const t = setTimeout(onClose, 2000)
     return () => clearTimeout(t)
   }, [onClose])
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 rounded-[--radius] bg-background-elevated border border-border-subtle shadow-lg text-callout text-foreground">
-      {message}
+    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-slide-up">
+      <div className="apple-glass px-5 py-3 rounded-full flex items-center gap-2.5 shadow-lg">
+        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-success/20 text-success shrink-0">
+          <IconCheck />
+        </span>
+        <span className="text-subheadline text-foreground whitespace-nowrap">{message}</span>
+      </div>
     </div>
   )
 }
 
-// ---- Section wrapper ----
-
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+// Section wrapper — Apple-style numbered section heading
+function Section({ number, title, children }: { number: string; title: string; children: React.ReactNode }) {
   return (
-    <section className="space-y-4">
-      <h2 className="text-title3 font-semibold text-foreground border-b border-border-subtle pb-3">
-        {title}
-      </h2>
+    <section className="space-y-6 animate-fade-in">
+      <div className="flex items-center gap-3">
+        <span className="flex items-center justify-center w-7 h-7 rounded-full bg-primary/15 text-primary text-caption1 font-semibold shrink-0">
+          {number}
+        </span>
+        <h2 className="text-title3 font-semibold text-foreground">{title}</h2>
+      </div>
       {children}
     </section>
   )
 }
 
-// ---- Demo Page ----
+// Demo group — label + content
+function DemoGroup({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="space-y-3">
+      <p className="text-caption1 font-semibold uppercase tracking-wider text-foreground-quaternary pl-1">
+        {label}
+      </p>
+      {children}
+    </div>
+  )
+}
 
-export default function DemoPage() {
-  // Toast
+// ── Color swatch ───────────────────────────────────────────
+
+function ColorSwatch({ name, variable, textDark = false }: { name: string; variable: string; textDark?: boolean }) {
+  return (
+    <div className="flex flex-col gap-1.5">
+      <div
+        className="h-12 rounded-lg border border-border-subtle shadow-sm"
+        style={{ background: `var(${variable})` }}
+      />
+      <div>
+        <p className={`text-caption1 font-medium ${textDark ? 'text-foreground' : 'text-foreground-secondary'}`}>{name}</p>
+        <p className="text-caption2 text-foreground-tertiary font-mono">{variable}</p>
+      </div>
+    </div>
+  )
+}
+
+// ── Main page ──────────────────────────────────────────────
+
+export default function DesignSystemPage() {
+  // State
   const [toast, setToast] = React.useState<string | null>(null)
   const showToast = (msg: string) => setToast(msg)
 
-  // Button state
   const [loadingBtn, setLoadingBtn] = React.useState(false)
-
-  // Input state
-  const [inputVal, setInputVal] = React.useState('')
-  const [emailVal, setEmailVal] = React.useState('')
+  const [inputVal, setInputVal]     = React.useState('')
+  const [emailVal, setEmailVal]     = React.useState('')
   const [passwordVal, setPasswordVal] = React.useState('')
-
-  // Modal state
-  const [modalOpen, setModalOpen] = React.useState(false)
-
-  // Select state
-  const [selectVal, setSelectVal] = React.useState('')
+  const [modalOpen, setModalOpen]   = React.useState(false)
+  const [selectVal, setSelectVal]   = React.useState('')
   const [searchableVal, setSearchableVal] = React.useState('')
-
-  // Textarea state
   const [textareaVal, setTextareaVal] = React.useState('')
-
-  // Alert dismiss state
   const [alertVisible, setAlertVisible] = React.useState(true)
-
-  // Badge dismiss state
-  const [badges, setBadges] = React.useState(['デザイン', '開発', 'AI'])
-
-  // Tabs state
-  const [activeTab, setActiveTab] = React.useState('overview')
+  const [badges, setBadges]         = React.useState(['デザイン', '開発', 'AI'])
+  const [activeTab, setActiveTab]   = React.useState('overview')
 
   const selectOptions = [
-    { value: 'tokyo', label: '東京' },
-    { value: 'osaka', label: '大阪' },
-    { value: 'kyoto', label: '京都' },
-    { value: 'sapporo', label: '札幌' },
-    { value: 'fukuoka', label: '福岡' },
+    { value: 'tokyo',    label: '東京' },
+    { value: 'osaka',    label: '大阪' },
+    { value: 'kyoto',    label: '京都' },
+    { value: 'sapporo',  label: '札幌' },
+    { value: 'fukuoka',  label: '福岡' },
   ]
-
   const demoTabs = [
-    { id: 'overview', label: '概要', icon: <IconCalendar /> },
-    { id: 'tasks', label: 'タスク', icon: <IconMail /> },
-    { id: 'settings', label: '設定' },
+    { id: 'overview',  label: '概要',  icon: <IconCalendar /> },
+    { id: 'tasks',     label: 'タスク', icon: <IconMail /> },
+    { id: 'settings',  label: '設定' },
   ]
 
   const handleLoadingDemo = () => {
@@ -132,112 +160,218 @@ export default function DemoPage() {
   }
 
   return (
-    <main className="min-h-screen bg-background px-4 py-12">
+    <main className="min-h-screen bg-background">
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
 
-      <div className="mx-auto max-w-3xl space-y-14">
-
-        {/* Header */}
-        <div className="space-y-2">
-          <p className="text-footnote text-foreground-tertiary uppercase tracking-widest">
-            UIコンポーネントライブラリ
+      {/* ── Hero ─────────────────────────────────────────── */}
+      <div className="relative overflow-hidden border-b border-border-subtle">
+        {/* Subtle radial glow */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(10,132,255,0.12) 0%, transparent 70%)',
+          }}
+          aria-hidden="true"
+        />
+        <div className="relative mx-auto max-w-3xl px-6 py-20 space-y-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full apple-glass text-caption1 font-medium text-foreground-secondary">
+            <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse-subtle" aria-hidden="true" />
+            チケット #01 — デザインシステム
+          </div>
+          <div className="space-y-3">
+            <h1 className="text-largetitle font-semibold text-gradient-primary leading-tight">
+              AI Secretary
+            </h1>
+            <p className="text-title3 font-light text-foreground-secondary">
+              UIコンポーネントライブラリ
+            </p>
+          </div>
+          <p className="text-body text-foreground-tertiary max-w-xl leading-relaxed">
+            Apple Human Interface Guidelines に準拠したデザインシステム。
+            CSS変数ベースのトークン、厳密な型付け、WAI-ARIA完全対応。
           </p>
-          <h1 className="text-largetitle font-semibold text-gradient-primary">
-            AI Secretary
-          </h1>
-          <p className="text-body text-foreground-secondary">
-            デザインシステム — 全10コンポーネント
-          </p>
+          {/* Stats */}
+          <div className="flex flex-wrap gap-4 pt-2">
+            {[
+              { value: '10', label: 'コンポーネント' },
+              { value: 'HIG', label: 'Apple 準拠' },
+              { value: '44px', label: 'タッチターゲット' },
+              { value: 'WCAG AA', label: 'アクセシビリティ' },
+            ].map((s) => (
+              <div key={s.label} className="apple-inset px-4 py-2.5 rounded-lg">
+                <p className="text-title3 font-semibold text-foreground">{s.value}</p>
+                <p className="text-caption1 text-foreground-tertiary">{s.label}</p>
+              </div>
+            ))}
+          </div>
         </div>
+      </div>
 
-        {/* ---- 1. Button ---- */}
-        <Section title="1. ボタン">
-          <div className="space-y-4">
-            {/* Variants */}
-            <div>
-              <p className="text-footnote text-foreground-tertiary mb-3">バリアント</p>
-              <div className="flex flex-wrap gap-3">
-                <Button variant="primary" onClick={() => showToast('プライマリボタンが押されました')}>プライマリ</Button>
-                <Button variant="secondary" onClick={() => showToast('セカンダリボタンが押されました')}>セカンダリ</Button>
-                <Button variant="outline" onClick={() => showToast('アウトラインボタンが押されました')}>アウトライン</Button>
-                <Button variant="ghost" onClick={() => showToast('ゴーストボタンが押されました')}>ゴースト</Button>
-                <Button variant="destructive" onClick={() => showToast('デストラクティブボタンが押されました')}>削除</Button>
+      <div className="mx-auto max-w-3xl px-6 py-14 space-y-16">
+
+        {/* ── Design Tokens ─────────────────────────────── */}
+        <section className="space-y-10 animate-fade-in">
+          <div className="space-y-1">
+            <p className="text-caption1 font-semibold uppercase tracking-wider text-foreground-quaternary">
+              デザイントークン
+            </p>
+            <h2 className="text-title2 font-semibold text-foreground">カラーパレット</h2>
+          </div>
+
+          <div className="space-y-6">
+            <DemoGroup label="バックグラウンド">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <ColorSwatch name="Base"      variable="--background" />
+                <ColorSwatch name="Elevated"  variable="--background-elevated" />
+                <ColorSwatch name="Secondary" variable="--background-secondary" />
+                <ColorSwatch name="Tertiary"  variable="--background-tertiary" />
               </div>
-            </div>
+            </DemoGroup>
 
-            {/* Sizes */}
-            <div>
-              <p className="text-footnote text-foreground-tertiary mb-3">サイズ</p>
+            <DemoGroup label="システムカラー">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <ColorSwatch name="Blue (Primary)"    variable="--primary" />
+                <ColorSwatch name="Green (Success)"   variable="--success" />
+                <ColorSwatch name="Yellow (Warning)"  variable="--warning" textDark />
+                <ColorSwatch name="Red (Destructive)" variable="--destructive" />
+              </div>
+            </DemoGroup>
+
+            <DemoGroup label="フィル / セパレーター">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <ColorSwatch name="Fill"      variable="--fill" />
+                <ColorSwatch name="Fill 2nd"  variable="--fill-secondary" />
+                <ColorSwatch name="Border"    variable="--border" />
+                <ColorSwatch name="Subtle"    variable="--border-subtle" />
+              </div>
+            </DemoGroup>
+          </div>
+
+          <Divider />
+
+          {/* Typography scale */}
+          <div className="space-y-1">
+            <p className="text-caption1 font-semibold uppercase tracking-wider text-foreground-quaternary">
+              デザイントークン
+            </p>
+            <h2 className="text-title2 font-semibold text-foreground">タイポグラフィスケール</h2>
+          </div>
+          <div className="apple-card divide-y divide-border-subtle">
+            {[
+              { cls: 'text-largetitle',  label: 'Large Title',  spec: '34px / 41px' },
+              { cls: 'text-title1',      label: 'Title 1',      spec: '28px / 34px' },
+              { cls: 'text-title2',      label: 'Title 2',      spec: '22px / 28px' },
+              { cls: 'text-title3',      label: 'Title 3',      spec: '20px / 25px' },
+              { cls: 'text-headline',    label: 'Headline',     spec: '17px / 22px  Semibold' },
+              { cls: 'text-body',        label: 'Body',         spec: '17px / 22px' },
+              { cls: 'text-callout',     label: 'Callout',      spec: '16px / 21px' },
+              { cls: 'text-subheadline', label: 'Subheadline',  spec: '15px / 20px' },
+              { cls: 'text-footnote',    label: 'Footnote',     spec: '13px / 18px' },
+              { cls: 'text-caption1',    label: 'Caption 1',    spec: '12px / 16px' },
+              { cls: 'text-caption2',    label: 'Caption 2',    spec: '11px / 13px' },
+            ].map(({ cls, label, spec }) => (
+              <div key={cls} className="flex items-baseline justify-between px-5 py-3 gap-4">
+                <span className={`${cls} text-foreground`}>{label}</span>
+                <span className="text-caption2 text-foreground-quaternary font-mono shrink-0">{spec}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <Divider />
+
+        {/* ── 1. Button ─────────────────────────────────── */}
+        <Section number="1" title="ボタン">
+          <div className="apple-card p-6 space-y-6">
+            <DemoGroup label="バリアント">
+              <div className="flex flex-wrap gap-3">
+                <Button variant="primary"     onClick={() => showToast('プライマリボタン')}>プライマリ</Button>
+                <Button variant="secondary"   onClick={() => showToast('セカンダリボタン')}>セカンダリ</Button>
+                <Button variant="outline"     onClick={() => showToast('アウトライン')}>アウトライン</Button>
+                <Button variant="ghost"       onClick={() => showToast('ゴースト')}>ゴースト</Button>
+                <Button variant="destructive" onClick={() => showToast('削除アクション')}>削除</Button>
+              </div>
+            </DemoGroup>
+
+            <Divider />
+
+            <DemoGroup label="サイズ">
               <div className="flex flex-wrap items-center gap-3">
-                <Button size="sm" onClick={() => showToast('小ボタンが押されました')}>小</Button>
-                <Button size="md" onClick={() => showToast('中ボタンが押されました')}>中</Button>
-                <Button size="lg" onClick={() => showToast('大ボタンが押されました')}>大</Button>
+                <Button size="sm" onClick={() => showToast('小ボタン')}>小</Button>
+                <Button size="md" onClick={() => showToast('中ボタン')}>中</Button>
+                <Button size="lg" onClick={() => showToast('大ボタン')}>大</Button>
               </div>
-            </div>
+            </DemoGroup>
 
-            {/* With icons */}
-            <div>
-              <p className="text-footnote text-foreground-tertiary mb-3">アイコン付き</p>
+            <Divider />
+
+            <DemoGroup label="アイコン付き">
               <div className="flex flex-wrap gap-3">
-                <Button variant="primary" leftIcon={<IconPlus />} onClick={() => showToast('新規タスクを作成します')}>新規タスク</Button>
-                <Button variant="outline" rightIcon={<IconSearch />} onClick={() => showToast('検索します')}>検索</Button>
-                <Button variant="secondary" leftIcon={<IconCalendar />} rightIcon={<IconMail />} onClick={() => showToast('スケジュールを追加します')}>
+                <Button variant="primary"   leftIcon={<IconPlus />}   onClick={() => showToast('新規タスク作成')}>新規タスク</Button>
+                <Button variant="outline"   rightIcon={<IconSearch />} onClick={() => showToast('検索')}>検索</Button>
+                <Button variant="secondary" leftIcon={<IconCalendar />} rightIcon={<IconMail />} onClick={() => showToast('スケジュール')}>
                   スケジュール
                 </Button>
               </div>
-            </div>
+            </DemoGroup>
 
-            {/* Loading & disabled */}
-            <div>
-              <p className="text-footnote text-foreground-tertiary mb-3">ローディング &amp; 無効</p>
+            <Divider />
+
+            <DemoGroup label="ローディング & 無効">
               <div className="flex flex-wrap gap-3">
-                <Button variant="primary" loading={loadingBtn} onClick={handleLoadingDemo}>
+                <Button variant="primary"     loading={loadingBtn} onClick={handleLoadingDemo}>
                   {loadingBtn ? '保存中...' : 'クリックしてロード'}
                 </Button>
-                <Button variant="outline" disabled>無効</Button>
+                <Button variant="outline"     disabled>無効</Button>
                 <Button variant="destructive" loading>処理中</Button>
               </div>
+            </DemoGroup>
+          </div>
+        </Section>
+
+        <Divider />
+
+        {/* ── 2. Input ──────────────────────────────────── */}
+        <Section number="2" title="入力フィールド">
+          <div className="apple-card p-6">
+            <div className="grid gap-5 sm:grid-cols-2">
+              <Input
+                label="氏名"
+                placeholder="田村 寿"
+                value={inputVal}
+                onChange={(e) => setInputVal(e.target.value)}
+                hint="正式な氏名を入力してください"
+              />
+              <Input
+                label="メールアドレス"
+                type="email"
+                placeholder="you@example.com"
+                leftIcon={<IconMail />}
+                value={emailVal}
+                onChange={(e) => setEmailVal(e.target.value)}
+              />
+              <Input
+                label="パスワード"
+                type="password"
+                placeholder="8文字以上"
+                value={passwordVal}
+                onChange={(e) => setPasswordVal(e.target.value)}
+              />
+              <Input
+                label="検索"
+                type="search"
+                placeholder="タスクを検索..."
+                leftIcon={<IconSearch />}
+                error="該当するタスクが見つかりません"
+              />
             </div>
           </div>
         </Section>
 
-        {/* ---- 2. Input ---- */}
-        <Section title="2. 入力フィールド">
-          <div className="grid gap-5 sm:grid-cols-2">
-            <Input
-              label="氏名"
-              placeholder="田村 寿"
-              value={inputVal}
-              onChange={(e) => setInputVal(e.target.value)}
-              hint="正式な氏名を入力してください"
-            />
-            <Input
-              label="メールアドレス"
-              type="email"
-              placeholder="you@example.com"
-              leftIcon={<IconMail />}
-              value={emailVal}
-              onChange={(e) => setEmailVal(e.target.value)}
-            />
-            <Input
-              label="パスワード"
-              type="password"
-              placeholder="8文字以上"
-              value={passwordVal}
-              onChange={(e) => setPasswordVal(e.target.value)}
-            />
-            <Input
-              label="検索"
-              type="search"
-              placeholder="タスクを検索..."
-              leftIcon={<IconSearch />}
-              error="該当するタスクが見つかりません"
-            />
-          </div>
-        </Section>
+        <Divider />
 
-        {/* ---- 3. Card ---- */}
-        <Section title="3. カード">
+        {/* ── 3. Card ───────────────────────────────────── */}
+        <Section number="3" title="カード">
           <div className="grid gap-4 sm:grid-cols-2">
             <Card>
               <CardHeader withBorder>
@@ -245,23 +379,23 @@ export default function DemoPage() {
               </CardHeader>
               <CardBody>
                 <p className="text-callout text-foreground-secondary">
-                  ヘッダー・ボディ・フッターを持つ標準カードです。
+                  ヘッダー・ボディ・フッターを持つ標準カードです。border と shadow はデザイントークンで制御されます。
                 </p>
               </CardBody>
               <CardFooter withBorder>
                 <div className="flex justify-end">
-                  <Button variant="ghost" size="sm" onClick={() => showToast('詳細を表示します')}>詳細を見る</Button>
+                  <Button variant="ghost" size="sm" onClick={() => showToast('詳細を表示')}>詳細を見る</Button>
                 </div>
               </CardFooter>
             </Card>
 
-            <Card clickable onClick={() => showToast('カードがクリックされました')}>
+            <Card clickable onClick={() => showToast('カードをクリック')}>
               <CardBody>
                 <div className="space-y-2">
                   <Badge variant="primary">クリック可能</Badge>
                   <h3 className="text-headline font-semibold text-foreground">インタラクティブカード</h3>
                   <p className="text-callout text-foreground-secondary">
-                    ホバーするとスケール・シャドウアニメーションが表示されます。
+                    ホバーでスケール・シャドウアニメーション。キーボード操作にも対応。
                   </p>
                 </div>
               </CardBody>
@@ -269,39 +403,40 @@ export default function DemoPage() {
           </div>
         </Section>
 
-        {/* ---- 4. Modal ---- */}
-        <Section title="4. モーダル">
-          <div className="flex flex-wrap gap-3">
+        <Divider />
+
+        {/* ── 4. Modal ──────────────────────────────────── */}
+        <Section number="4" title="モーダル">
+          <div className="apple-card p-6">
             <Button variant="primary" onClick={() => setModalOpen(true)}>
               モーダルを開く
             </Button>
           </div>
 
-          <Modal
-            open={modalOpen}
-            onClose={() => setModalOpen(false)}
-            title="会議をスケジュール"
-            size="md"
-          >
+          <Modal open={modalOpen} onClose={() => setModalOpen(false)} title="会議をスケジュール" size="md">
             <div className="space-y-4">
               <p className="text-callout text-foreground-secondary">
-                会議の詳細を入力してください。モーダルはEscキーまたはオーバーレイクリックで閉じます。
+                会議の詳細を入力してください。Esc キーまたはオーバーレイクリックで閉じます。フォーカストラップ対応。
               </p>
               <Input label="会議タイトル" placeholder="Q2 計画セッション" />
               <Input label="日付" type="date" leftIcon={<IconCalendar />} />
               <div className="flex justify-end gap-3 pt-2">
-                <Button variant="ghost" onClick={() => setModalOpen(false)}>キャンセル</Button>
-                <Button variant="primary" onClick={() => { setModalOpen(false); showToast('会議をスケジュールしました') }}>スケジュール</Button>
+                <Button variant="ghost"   onClick={() => setModalOpen(false)}>キャンセル</Button>
+                <Button variant="primary" onClick={() => { setModalOpen(false); showToast('会議をスケジュールしました') }}>
+                  スケジュール
+                </Button>
               </div>
             </div>
           </Modal>
         </Section>
 
-        {/* ---- 5. Alert ---- */}
-        <Section title="5. アラート">
+        <Divider />
+
+        {/* ── 5. Alert ──────────────────────────────────── */}
+        <Section number="5" title="アラート">
           <div className="space-y-3">
             <Alert type="info" title="新機能が利用可能です">
-              AIアシスタントがカレンダーの招待を自動処理できるようになりました。
+              AIアシスタントがカレンダー招待を自動処理できるようになりました。
             </Alert>
             <Alert type="success" title="タスク完了">
               会議のメモが全参加者に送信されました。
@@ -310,12 +445,7 @@ export default function DemoPage() {
               APIキーの有効期限が3日後に切れます。更新してください。
             </Alert>
             {alertVisible && (
-              <Alert
-                type="error"
-                title="接続に失敗しました"
-                dismissible
-                onDismiss={() => setAlertVisible(false)}
-              >
+              <Alert type="error" title="接続に失敗しました" dismissible onDismiss={() => setAlertVisible(false)}>
                 カレンダーと同期できません。ネットワーク接続を確認してください。
               </Alert>
             )}
@@ -327,74 +457,46 @@ export default function DemoPage() {
           </div>
         </Section>
 
-        {/* ---- 6. Select ---- */}
-        <Section title="6. セレクト">
-          <div className="grid gap-5 sm:grid-cols-2">
-            <Select
-              label="都市"
-              options={selectOptions}
-              value={selectVal}
-              onChange={setSelectVal}
-              placeholder="都市を選択"
-            />
-            <Select
-              label="都市（検索可能）"
-              options={selectOptions}
-              value={searchableVal}
-              onChange={setSearchableVal}
-              placeholder="検索して選択"
-              searchable
-            />
-            <Select
-              label="エラー表示"
-              options={selectOptions}
-              value=""
-              onChange={() => {}}
-              placeholder="必須項目"
-              error="都市を選択してください"
-            />
-            <Select
-              label="無効"
-              options={selectOptions}
-              value=""
-              onChange={() => {}}
-              placeholder="利用不可"
-              disabled
-            />
+        <Divider />
+
+        {/* ── 6. Select ─────────────────────────────────── */}
+        <Section number="6" title="セレクト">
+          <div className="apple-card p-6">
+            <div className="grid gap-5 sm:grid-cols-2">
+              <Select label="都市" options={selectOptions} value={selectVal} onChange={setSelectVal} placeholder="都市を選択" />
+              <Select label="都市（検索可能）" options={selectOptions} value={searchableVal} onChange={setSearchableVal} placeholder="検索して選択" searchable />
+              <Select label="エラー表示" options={selectOptions} value="" onChange={() => {}} placeholder="必須項目" error="都市を選択してください" />
+              <Select label="無効" options={selectOptions} value="" onChange={() => {}} placeholder="利用不可" disabled />
+            </div>
           </div>
         </Section>
 
-        {/* ---- 7. Textarea ---- */}
-        <Section title="7. テキストエリア">
-          <div className="grid gap-5 sm:grid-cols-2">
-            <Textarea
-              label="会議メモ"
-              placeholder="会議のメモを入力..."
-              hint="Markdownに対応しています"
-              value={textareaVal}
-              onChange={setTextareaVal}
-              maxLength={200}
-            />
-            <Textarea
-              label="自動リサイズ"
-              placeholder="入力すると自動的に広がります..."
-              autoResize
-              hint="入力に合わせて拡張されます"
-            />
-            <Textarea
-              label="エラー表示"
-              placeholder="必須項目"
-              error="この項目は必須です"
-            />
+        <Divider />
+
+        {/* ── 7. Textarea ───────────────────────────────── */}
+        <Section number="7" title="テキストエリア">
+          <div className="apple-card p-6">
+            <div className="grid gap-5 sm:grid-cols-2">
+              <Textarea
+                label="会議メモ"
+                placeholder="会議のメモを入力..."
+                hint="Markdown に対応しています"
+                value={textareaVal}
+                onChange={setTextareaVal}
+                maxLength={200}
+              />
+              <Textarea label="自動リサイズ" placeholder="入力すると自動的に広がります..." autoResize hint="入力に合わせて拡張" />
+              <Textarea label="エラー表示" placeholder="必須項目" error="この項目は必須です" />
+            </div>
           </div>
         </Section>
 
-        {/* ---- 8. Badge ---- */}
-        <Section title="8. バッジ">
-          <div className="space-y-4">
-            {/* Variants */}
-            <div>
-              <p className="text-footnote text-foreground-tertiary mb-3">バリアント</p>
+        <Divider />
+
+        {/* ── 8. Badge ──────────────────────────────────── */}
+        <Section number="8" title="バッジ">
+          <div className="apple-card p-6 space-y-6">
+            <DemoGroup label="バリアント">
               <div className="flex flex-wrap gap-2">
                 <Badge variant="default">デフォルト</Badge>
                 <Badge variant="primary">プライマリ</Badge>
@@ -403,137 +505,98 @@ export default function DemoPage() {
                 <Badge variant="destructive">削除</Badge>
                 <Badge variant="outline">アウトライン</Badge>
               </div>
-            </div>
-
-            {/* Sizes */}
-            <div>
-              <p className="text-footnote text-foreground-tertiary mb-3">サイズ</p>
+            </DemoGroup>
+            <Divider />
+            <DemoGroup label="サイズ">
               <div className="flex flex-wrap items-center gap-2">
                 <Badge variant="primary" size="sm">小</Badge>
                 <Badge variant="primary" size="md">中</Badge>
               </div>
-            </div>
-
-            {/* Dismissible */}
-            <div>
-              <p className="text-footnote text-foreground-tertiary mb-3">削除可能なタグ</p>
+            </DemoGroup>
+            <Divider />
+            <DemoGroup label="削除可能なタグ">
               <div className="flex flex-wrap gap-2">
                 {badges.map((badge) => (
-                  <Badge
-                    key={badge}
-                    variant="primary"
-                    dismissible
-                    onDismiss={() => setBadges((prev) => prev.filter((b) => b !== badge))}
-                  >
+                  <Badge key={badge} variant="primary" dismissible onDismiss={() => setBadges((p) => p.filter((b) => b !== badge))}>
                     {badge}
                   </Badge>
                 ))}
                 {badges.length === 0 && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setBadges(['デザイン', '開発', 'AI'])}
-                  >
+                  <Button variant="ghost" size="sm" onClick={() => setBadges(['デザイン', '開発', 'AI'])}>
                     バッジをリセット
                   </Button>
                 )}
               </div>
-            </div>
+            </DemoGroup>
           </div>
         </Section>
 
-        {/* ---- 9. Spinner ---- */}
-        <Section title="9. スピナー">
-          <div className="space-y-4">
-            {/* Sizes */}
-            <div>
-              <p className="text-footnote text-foreground-tertiary mb-3">サイズ</p>
-              <div className="flex items-center gap-6">
-                <div className="flex flex-col items-center gap-2">
-                  <Spinner size="sm" />
-                  <span className="text-caption1 text-foreground-tertiary">小 (16px)</span>
-                </div>
-                <div className="flex flex-col items-center gap-2">
-                  <Spinner size="md" />
-                  <span className="text-caption1 text-foreground-tertiary">中 (24px)</span>
-                </div>
-                <div className="flex flex-col items-center gap-2">
-                  <Spinner size="lg" />
-                  <span className="text-caption1 text-foreground-tertiary">大 (32px)</span>
-                </div>
-              </div>
-            </div>
+        <Divider />
 
-            {/* Colors */}
-            <div>
-              <p className="text-footnote text-foreground-tertiary mb-3">カラー</p>
-              <div className="flex items-center gap-6">
-                <div className="flex flex-col items-center gap-2">
-                  <Spinner color="primary" />
-                  <span className="text-caption1 text-foreground-tertiary">プライマリ</span>
-                </div>
-                <div className="flex flex-col items-center gap-2">
-                  <Spinner color="foreground" />
-                  <span className="text-caption1 text-foreground-tertiary">フォアグラウンド</span>
-                </div>
-                <div className="flex flex-col items-center gap-2">
-                  <Spinner color="muted" />
-                  <span className="text-caption1 text-foreground-tertiary">ミュート</span>
-                </div>
+        {/* ── 9. Spinner ────────────────────────────────── */}
+        <Section number="9" title="スピナー">
+          <div className="apple-card p-6 space-y-6">
+            <DemoGroup label="サイズ">
+              <div className="flex items-center gap-8">
+                {[{ size: 'sm' as const, label: '小 16px' }, { size: 'md' as const, label: '中 24px' }, { size: 'lg' as const, label: '大 32px' }].map(({ size, label }) => (
+                  <div key={size} className="flex flex-col items-center gap-2">
+                    <Spinner size={size} />
+                    <span className="text-caption2 text-foreground-tertiary">{label}</span>
+                  </div>
+                ))}
               </div>
-            </div>
+            </DemoGroup>
+            <Divider />
+            <DemoGroup label="カラー">
+              <div className="flex items-center gap-8">
+                {[
+                  { color: 'primary' as const,    label: 'Primary' },
+                  { color: 'foreground' as const,  label: 'Foreground' },
+                  { color: 'muted' as const,       label: 'Muted' },
+                ].map(({ color, label }) => (
+                  <div key={color} className="flex flex-col items-center gap-2">
+                    <Spinner color={color} />
+                    <span className="text-caption2 text-foreground-tertiary">{label}</span>
+                  </div>
+                ))}
+              </div>
+            </DemoGroup>
           </div>
         </Section>
 
-        {/* ---- 10. Tabs ---- */}
-        <Section title="10. タブ">
-          <div className="space-y-4">
-            <Tabs
-              tabs={demoTabs}
-              activeTab={activeTab}
-              onChange={setActiveTab}
-            />
+        <Divider />
 
-            <div
-              role="tabpanel"
-              id={`tabpanel-${activeTab}`}
-              aria-labelledby={`tab-${activeTab}`}
-              className="apple-inset rounded-lg p-4"
-            >
+        {/* ── 10. Tabs ──────────────────────────────────── */}
+        <Section number="10" title="タブ">
+          <div className="apple-card p-6 space-y-5">
+            <Tabs tabs={demoTabs} activeTab={activeTab} onChange={setActiveTab} />
+            <div role="tabpanel" id={`tabpanel-${activeTab}`} aria-labelledby={`tab-${activeTab}`} className="apple-inset rounded-lg p-4">
               {activeTab === 'overview' && (
-                <p className="text-callout text-foreground-secondary">
-                  概要タブのコンテンツ — AIアシスタントのダッシュボードサマリーを表示します。
-                </p>
+                <p className="text-callout text-foreground-secondary">概要タブ — ダッシュボードサマリーを表示します。</p>
               )}
               {activeTab === 'tasks' && (
-                <p className="text-callout text-foreground-secondary">
-                  タスクタブのコンテンツ — 未完了・完了済みのタスクを表示します。
-                </p>
+                <p className="text-callout text-foreground-secondary">タスクタブ — 未完了・完了済みのタスクを表示します。</p>
               )}
               {activeTab === 'settings' && (
-                <p className="text-callout text-foreground-secondary">
-                  設定タブのコンテンツ — AIアシスタントの設定を行います。
-                </p>
+                <p className="text-callout text-foreground-secondary">設定タブ — AIアシスタントの設定を行います。</p>
               )}
             </div>
-
             <div>
-              <p className="text-footnote text-foreground-tertiary mb-3">全幅バリアント</p>
-              <Tabs
-                tabs={demoTabs.slice(0, 3)}
-                activeTab={activeTab}
-                onChange={setActiveTab}
-                fullWidth
-              />
+              <p className="text-caption2 text-foreground-quaternary mb-3 uppercase tracking-wider font-semibold">全幅</p>
+              <Tabs tabs={demoTabs} activeTab={activeTab} onChange={setActiveTab} fullWidth />
             </div>
           </div>
         </Section>
 
-        {/* Footer */}
-        <div className="border-t border-border-subtle pt-8 text-center">
-          <p className="text-footnote text-foreground-quaternary">
-            AI Secretary — UIコンポーネントライブラリ — Next.js 16 · React 19 · TypeScript · Tailwind CSS v3
-          </p>
+        {/* ── Footer ────────────────────────────────────── */}
+        <div className="pt-4">
+          <Divider />
+          <div className="pt-8 text-center space-y-1">
+            <p className="text-subheadline font-medium text-foreground-secondary">AI Secretary</p>
+            <p className="text-caption1 text-foreground-quaternary">
+              UIコンポーネントライブラリ · Next.js 16 · React 19 · TypeScript · Tailwind CSS v3
+            </p>
+          </div>
         </div>
       </div>
     </main>
