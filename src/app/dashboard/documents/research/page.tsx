@@ -21,7 +21,7 @@ function IconSearch() {
       strokeWidth="1.2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="text-primary opacity-60"
+      className="text-foreground"
       aria-hidden="true"
     >
       <circle cx="11" cy="11" r="8" />
@@ -86,25 +86,25 @@ export default function ResearchPage() {
         <div className="flex items-center gap-3">
           <button
             onClick={clearResult}
-            className="flex items-center gap-1.5 text-callout text-foreground-secondary hover:text-foreground transition-colors shrink-0"
+            className="flex items-center gap-1.5 text-callout text-foreground-secondary shrink-0"
             aria-label="検索画面に戻る"
           >
             <IconArrowLeft />
             新しい検索
           </button>
-          <div className="flex-1 apple-inset rounded-lg px-4 py-2 min-w-0">
+          <div className="flex-1 px-4 py-2 min-w-0">
             <p className="text-callout text-foreground truncate">{result.query}</p>
           </div>
         </div>
 
         {/* Full-width results */}
-        <div className="apple-card p-6">
+        <div className="p-6">
           <ResearchResult result={result} />
         </div>
 
         {/* History */}
         {history.length > 0 && (
-          <div className="apple-card p-5 space-y-3">
+          <div className="p-5 space-y-3">
             <h2 className="text-headline font-semibold text-foreground">リサーチ履歴</h2>
             <ResearchHistory
               history={history}
@@ -141,13 +141,7 @@ export default function ResearchPage() {
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="調査したいトピックや質問を入力してください..."
-            className={[
-              'w-full rounded-xl bg-background-secondary border text-callout text-foreground',
-              'placeholder:text-foreground-tertiary px-4 py-3 resize-none',
-              'focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring',
-              'transition-all duration-250',
-              isOverLimit ? 'border-destructive' : 'border-border',
-            ].join(' ')}
+            className="w-full text-callout text-foreground placeholder:text-foreground-tertiary px-4 py-3 resize-none focus:outline-none"
           />
           <div className="flex items-center justify-between">
             <p className="text-caption1 text-foreground-quaternary">⌘+Enter で検索</p>
@@ -180,7 +174,7 @@ export default function ResearchPage() {
       {/* History */}
       {(history.length > 0 || isLoadingHistory) && (
         <div className="w-full max-w-2xl">
-          <div className="border-t border-border pt-6 space-y-3">
+          <div className="pt-6 space-y-3">
             <h2 className="text-headline font-semibold text-foreground">リサーチ履歴</h2>
             <ResearchHistory
               history={history}

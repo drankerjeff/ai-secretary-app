@@ -152,16 +152,13 @@ export function Select({
         onKeyDown={handleTriggerKeyDown}
         className={[
           'w-full flex items-center justify-between',
-          'rounded-lg bg-background-secondary border text-callout',
+          'text-callout',
           'px-3.5 py-2.5 min-h-[44px]',
-          'transition-all duration-250 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]',
-          'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-0 focus:border-ring',
+          'focus:outline-none',
           'disabled:opacity-50 disabled:cursor-not-allowed',
-          hasError ? 'border-destructive' : 'border-border',
-          open ? 'ring-2 ring-ring border-ring' : '',
         ].join(' ')}
       >
-        <span className={selectedOption ? 'text-foreground' : 'text-foreground-tertiary'}>
+        <span className="text-foreground">
           {selectedOption ? selectedOption.label : placeholder}
         </span>
         <svg
@@ -173,11 +170,7 @@ export function Select({
           strokeWidth="2.5"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className={[
-            'shrink-0 text-foreground-tertiary',
-            'transition-transform duration-250 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]',
-            open ? 'rotate-180' : '',
-          ].join(' ')}
+          className="shrink-0 text-foreground-tertiary"
           aria-hidden="true"
         >
           <polyline points="6 9 12 15 18 9" />
@@ -187,15 +180,11 @@ export function Select({
       {/* Dropdown */}
       {open && (
         <div
-          className={[
-            'absolute top-full left-0 right-0 z-50 mt-1',
-            'bg-background-elevated rounded-lg shadow-lg border border-border',
-            'overflow-hidden',
-          ].join(' ')}
+          className="absolute top-full left-0 right-0 z-50 mt-1 overflow-hidden"
           onKeyDown={handleListKeyDown}
         >
           {searchable && (
-            <div className="p-2 border-b border-border-subtle">
+            <div className="p-2">
               <input
                 ref={searchRef}
                 type="text"
@@ -207,9 +196,9 @@ export function Select({
                 placeholder="検索..."
                 aria-label="Search options"
                 className={[
-                  'w-full bg-background-secondary border border-border rounded-lg',
+                  'w-full bg-background-secondary',
                   'text-callout text-foreground placeholder:text-foreground-tertiary',
-                  'px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring',
+                  'px-3 py-2 focus:outline-none',
                 ].join(' ')}
               />
             </div>
@@ -236,16 +225,7 @@ export function Select({
                     aria-selected={isSelected}
                     onClick={() => handleSelect(option.value)}
                     onMouseEnter={() => setFocusedIndex(index)}
-                    className={[
-                      'flex items-center justify-between',
-                      'px-3.5 py-2.5 text-callout cursor-pointer',
-                      'transition-colors duration-250 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]',
-                      isSelected
-                        ? 'text-primary bg-primary/10'
-                        : isFocused
-                          ? 'text-foreground bg-fill'
-                          : 'text-foreground hover:bg-fill',
-                    ].join(' ')}
+                    className="flex items-center justify-between px-3.5 py-2.5 text-callout cursor-pointer text-foreground"
                   >
                     <span>{option.label}</span>
                     {isSelected && (

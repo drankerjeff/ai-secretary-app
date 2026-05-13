@@ -96,7 +96,7 @@ export function Modal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop overlay */}
       <div
-        className="absolute inset-0 bg-overlay backdrop-blur-apple animate-in fade-in duration-250"
+        className="absolute inset-0 bg-overlay"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -108,14 +108,13 @@ export function Modal({
         aria-modal="true"
         aria-labelledby={title ? titleId : undefined}
         className={[
-          'relative z-10 w-full apple-card rounded-xl p-0 m-0',
-          'animate-in fade-in slide-in-from-bottom-4 duration-250',
+          'relative z-10 w-full p-0 m-0',
           sizeMap[size],
         ].join(' ')}
         style={{ maxHeight: '90vh', overflowY: 'auto' }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-border-subtle">
+        <div className="flex items-center justify-between px-6 pt-5 pb-4">
           {title ? (
             <h2
               id={titleId}
@@ -135,9 +134,8 @@ export function Modal({
             className={[
               'inline-flex items-center justify-center',
               'min-w-[44px] min-h-[44px]',
-              'rounded-lg text-foreground-secondary hover:text-foreground hover:bg-fill',
-              'transition-all duration-250',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              'text-foreground-secondary',
+              'focus-visible:outline-none',
             ].join(' ')}
           >
             <svg

@@ -96,7 +96,7 @@ function CalendarContent() {
         </Alert>
       )}
 
-      <div className="apple-card px-4 pt-4 pb-0">
+      <div className="px-4 pt-4 pb-0">
         <CalendarHeader
           currentDate={currentDate}
           onPrev={prevMonth}

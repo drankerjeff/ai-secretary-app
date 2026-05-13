@@ -30,14 +30,11 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
         tabIndex={clickable ? 0 : undefined}
         onKeyDown={clickable ? handleKeyDown : onKeyDown}
         className={[
-          'apple-card overflow-hidden',
-          'transition-all duration-250 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]',
+          'overflow-hidden',
           clickable
             ? [
                 'cursor-pointer',
-                'hover:scale-[1.015] hover:shadow-lg',
-                // Focus ring uses ring token to match design system
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+                'focus-visible:outline-none',
               ].join(' ')
             : '',
           className,
@@ -66,7 +63,6 @@ const CardHeader = React.forwardRef<HTMLDivElement, CardHeaderProps>(
         ref={ref}
         className={[
           'px-5 py-4',
-          withBorder ? 'border-b border-border-subtle' : '',
           className,
         ].join(' ')}
         {...props}
@@ -111,7 +107,6 @@ const CardFooter = React.forwardRef<HTMLDivElement, CardFooterProps>(
         ref={ref}
         className={[
           'px-5 py-4',
-          withBorder ? 'border-t border-border-subtle' : '',
           className,
         ].join(' ')}
         {...props}

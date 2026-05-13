@@ -68,7 +68,7 @@ export function Tabs({
       role="tablist"
       aria-label="Navigation tabs"
       className={[
-        'inline-flex bg-background-secondary rounded-lg p-1 gap-0.5',
+        'inline-flex p-1 gap-0.5',
         fullWidth ? 'w-full' : 'w-fit',
         className,
       ].join(' ')}
@@ -88,14 +88,11 @@ export function Tabs({
             onKeyDown={(e) => handleKeyDown(e, tab.id)}
             className={[
               'relative inline-flex items-center justify-center gap-2',
-              'text-subheadline font-medium px-3.5 py-2 rounded',
+              'text-subheadline font-medium px-3.5 py-2',
               'min-h-[44px]',
-              'transition-all duration-200 ease-apple-ease',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              'focus-visible:outline-none',
               fullWidth ? 'flex-1' : '',
-              isActive
-                ? 'bg-background-elevated text-foreground shadow-sm'
-                : 'text-foreground-secondary hover:text-foreground hover:bg-fill',
+              'text-foreground',
             ].join(' ')}
           >
             {tab.icon && (
@@ -104,13 +101,6 @@ export function Tabs({
               </span>
             )}
             {tab.label}
-            {/* Active underline indicator */}
-            {isActive && (
-              <span
-                className="absolute bottom-1 left-3.5 right-3.5 h-0.5 rounded-full bg-primary animate-scale-in"
-                aria-hidden="true"
-              />
-            )}
           </button>
         )
       })}

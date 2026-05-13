@@ -60,25 +60,25 @@ export default function LoginPage() {
   // セッション確認中またはリダイレクト待ち
   if (isLoading || (!isLoading && user)) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
+      <div className="flex min-h-screen items-center justify-center">
         <Spinner size="lg" />
       </div>
     )
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="flex min-h-screen items-center justify-center px-4">
       <div className="w-full max-w-sm">
         {/* ロゴ・タイトル */}
         <div className="mb-8 text-center">
-          <h1 className="text-largetitle font-semibold text-gradient-primary">AI Secretary</h1>
+          <h1 className="text-largetitle font-semibold text-foreground">AI Secretary</h1>
           <p className="mt-2 text-callout text-foreground-secondary">
             スケジュール管理・議事録・文書作成をAIがサポート
           </p>
         </div>
 
         {/* カード */}
-        <div className="rounded-[--radius-lg] border border-border-subtle bg-background-elevated p-8 shadow-lg">
+        <div className="p-8">
           <h2 className="mb-1 text-headline font-semibold text-foreground">ログイン</h2>
           <p className="mb-6 text-footnote text-foreground-tertiary">
             Googleアカウントでサインインしてください
@@ -93,7 +93,7 @@ export default function LoginPage() {
           <button
             onClick={handleSignIn}
             disabled={signingIn}
-            className="flex w-full items-center justify-center gap-3 rounded-[--radius] border border-border-subtle bg-background px-4 py-3 text-subheadline font-medium text-foreground shadow-sm transition-all hover:bg-fill-quaternary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex w-full items-center justify-center gap-3 px-4 py-3 text-subheadline font-medium text-foreground disabled:cursor-not-allowed disabled:opacity-60"
           >
             {signingIn ? (
               <Spinner size="sm" />

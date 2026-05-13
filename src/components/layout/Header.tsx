@@ -65,14 +65,7 @@ function SearchPopover() {
         aria-label="検索"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
-        className={[
-          'relative flex min-h-[44px] min-w-[44px] items-center justify-center rounded-[--radius]',
-          'transition-colors duration-250 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]',
-          'outline-none focus-visible:ring-2 focus-visible:ring-ring',
-          open
-            ? 'bg-fill text-foreground'
-            : 'text-foreground-secondary hover:bg-fill-quaternary hover:text-foreground',
-        ].join(' ')}
+        className="relative flex min-h-[44px] min-w-[44px] items-center justify-center outline-none"
       >
         <IconSearch />
       </button>
@@ -82,11 +75,11 @@ function SearchPopover() {
         <div
           role="search"
           aria-label="検索ボックス"
-          className="absolute right-0 top-[calc(100%+8px)] w-72 animate-in fade-in slide-in-from-top-2 duration-200"
+          className="absolute right-0 top-[calc(100%+8px)] w-72"
         >
-          <div className="apple-glass rounded-[--radius-lg] shadow-lg overflow-hidden">
+          <div className="overflow-hidden">
             {/* Input row */}
-            <div className="flex items-center gap-2 px-3 py-2.5 border-b border-border-subtle">
+            <div className="flex items-center gap-2 px-3 py-2.5">
               <span className="text-foreground-tertiary shrink-0" aria-hidden="true">
                 <IconSearch />
               </span>
@@ -97,18 +90,14 @@ function SearchPopover() {
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="検索..."
                 aria-label="検索キーワード"
-                className={[
-                  'flex-1 bg-transparent text-callout text-foreground',
-                  'placeholder:text-foreground-tertiary',
-                  'outline-none border-none',
-                ].join(' ')}
+                className="flex-1 bg-transparent text-callout text-foreground placeholder:text-foreground-tertiary outline-none border-none"
               />
               {query && (
                 <button
                   type="button"
                   onClick={() => setQuery('')}
                   aria-label="クリア"
-                  className="text-foreground-tertiary hover:text-foreground transition-colors duration-250 shrink-0"
+                  className="text-foreground-tertiary shrink-0"
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
                     <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
@@ -145,13 +134,13 @@ interface HeaderProps {
 
 export function Header({ title, onMenuClick }: HeaderProps) {
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b border-border-subtle px-4 apple-glass">
+    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 px-4">
       {/* Hamburger (mobile only) */}
       <button
         type="button"
         onClick={onMenuClick}
         aria-label="メニューを開く"
-        className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-[--radius] text-foreground-secondary transition-colors duration-250 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] hover:bg-fill-quaternary hover:text-foreground lg:hidden outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="flex min-h-[44px] min-w-[44px] items-center justify-center text-foreground-secondary lg:hidden outline-none"
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
           <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
@@ -173,10 +162,10 @@ export function Header({ title, onMenuClick }: HeaderProps) {
         <button
           type="button"
           aria-label="通知"
-          className="relative flex min-h-[44px] min-w-[44px] items-center justify-center rounded-[--radius] text-foreground-secondary transition-colors duration-250 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] hover:bg-fill-quaternary hover:text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="relative flex min-h-[44px] min-w-[44px] items-center justify-center text-foreground-secondary outline-none"
         >
           <IconBell />
-          <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-destructive" aria-label="未読通知あり" />
+          <span className="absolute right-1.5 top-1.5 h-2 w-2" aria-label="未読通知あり" />
         </button>
 
         {/* User menu */}

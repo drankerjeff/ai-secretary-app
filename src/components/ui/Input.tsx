@@ -74,12 +74,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 .join(' ') || undefined
             }
             className={[
-              'w-full rounded-lg bg-background-secondary border',
+              'w-full bg-background-secondary',
               'text-foreground placeholder:text-foreground-tertiary',
-              'transition-all duration-250 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]',
-              'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-0 focus:border-ring',
+              'focus:outline-none',
               'disabled:opacity-50 disabled:cursor-not-allowed',
-              hasError ? 'border-destructive' : 'border-border',
               leftIcon ? 'pl-10' : 'pl-3.5',
               isPassword ? 'pr-10' : 'pr-3.5',
               sizeClass,
@@ -89,11 +87,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           />
 
           {isPassword && (
-            // Password toggle must be keyboard-reachable so screen-reader and
-            // keyboard-only users can reveal/hide the password.  tabIndex={-1}
-            // was removed; the button is in normal tab order.
-            // Touch target: min 44×44px via min-w/min-h so the hit area is
-            // sufficient even though the icon is 18px.
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
@@ -102,10 +95,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               className={[
                 'absolute right-0 flex items-center justify-center',
                 'min-w-[44px] min-h-[44px]',
-                'text-foreground-tertiary hover:text-foreground-secondary',
-                'transition-colors duration-250',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                'rounded-lg',
+                'text-foreground-tertiary',
+                'focus-visible:outline-none',
               ].join(' ')}
             >
               {showPassword ? (

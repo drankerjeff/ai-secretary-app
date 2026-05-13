@@ -86,20 +86,10 @@ const handleSubmit = async () => {
     // 文の長さ
     const avgLen = sentences.reduce((sum, s) => sum + s.length, 0) / Math.max(sentences.length, 1)
     const sentenceLengthLabel = avgLen < 20 ? '短い' : avgLen < 45 ? '普通' : '長い'
-    const sentenceLengthClass = avgLen < 20
-      ? 'bg-success/15 text-success'
-      : avgLen < 45
-        ? 'bg-background-secondary text-foreground-secondary'
-        : 'bg-warning/15 text-warning'
 
     // 適書レベル
     const density = result.suggestions.length / Math.max(text.length / 100, 1)
     const readabilityLabel = density < 1 ? '読みやすい' : density < 3 ? '標準的' : '改善が必要'
-    const readabilityClass = density < 1
-      ? 'bg-success/15 text-success'
-      : density < 3
-        ? 'bg-warning/15 text-warning'
-        : 'bg-destructive/15 text-destructive'
 
     // よく使う表現
     const phraseList = [
@@ -110,7 +100,7 @@ const handleSubmit = async () => {
     ]
     const foundPhrases = phraseList.filter((p) => text.includes(p))
 
-    return { formalityScore, formalityLabel, sentenceLengthLabel, sentenceLengthClass, readabilityLabel, readabilityClass, foundPhrases }
+    return { formalityScore, formalityLabel, sentenceLengthLabel, readabilityLabel, foundPhrases }
   }, [result])
 
   const statItems: { type: Suggestion['type']; label: string }[] = [
@@ -128,26 +118,16 @@ const handleSubmit = async () => {
           AI が誤字・表現・文体を自動チェックします。
         </p>
         {/* page-level tab bar */}
-        <div className="flex items-center gap-0.5 bg-background-secondary rounded-lg p-1 w-fit mt-2">
+        <div className="flex items-center gap-0.5 p-1 w-fit mt-2">
           <button
             onClick={() => setLeftTab('input')}
-            className={[
-              'px-4 py-1.5 rounded-md text-subheadline font-medium transition-colors',
-              leftTab === 'input'
-                ? 'bg-background text-foreground shadow-sm'
-                : 'text-foreground-secondary hover:text-foreground',
-            ].join(' ')}
+            className="px-4 py-1.5 text-subheadline font-medium text-foreground"
           >
             文書入力
           </button>
           <button
             onClick={() => setLeftTab('analysis')}
-            className={[
-              'px-4 py-1.5 rounded-md text-subheadline font-medium transition-colors',
-              leftTab === 'analysis'
-                ? 'bg-background text-foreground shadow-sm'
-                : 'text-foreground-secondary hover:text-foreground',
-            ].join(' ')}
+            className="px-4 py-1.5 text-subheadline font-medium text-foreground"
           >
             文体分析
           </button>
@@ -157,7 +137,7 @@ const handleSubmit = async () => {
       {/* 2-panel layout */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
         {/* Left panel */}
-        <div className="apple-card p-5 space-y-4">
+        <div className="p-5 space-y-4">
 
           {/* 文書入力 */}
           {leftTab === 'input' && (
@@ -181,13 +161,7 @@ const handleSubmit = async () => {
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   placeholder="ここにテキストを貼り付けてください..."
-                  className={[
-                    'w-full rounded-lg bg-background-secondary border text-callout text-foreground',
-                    'placeholder:text-foreground-tertiary px-3.5 py-2.5 resize-none',
-                    'focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring',
-                    'transition-all duration-250 ease-apple-ease',
-                    isOverLimit ? 'border-destructive' : 'border-border',
-                  ].join(' ')}
+                  className="w-full text-callout text-foreground placeholder:text-foreground-tertiary px-3.5 py-2.5 resize-none focus:outline-none"
                 />
                 <div className="flex justify-end">
                   <span className={['text-footnote', isOverLimit ? 'text-destructive' : 'text-foreground-tertiary'].join(' ')}>
@@ -219,14 +193,14 @@ const handleSubmit = async () => {
                 <div className="space-y-5">
                   {/* summary stats */}
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                    <div className="apple-inset rounded-xl p-4 text-center space-y-1">
+                    <div className="p-4 text-center space-y-1">
                       <p className="text-title1 font-bold text-foreground">
                         {result.suggestions.length}
                       </p>
                       <p className="text-caption1 text-foreground-secondary">修正提案数</p>
                     </div>
                     {statItems.map(({ type, label }) => (
-                      <div key={type} className="apple-inset rounded-xl p-4 text-center space-y-1">
+                      <div key={type} className="p-4 text-center space-y-1">
                         <p className={['text-title1 font-bold', TYPE_COLORS[type]].join(' ')}>
                           {typeCounts[type] ?? 0}
                         </p>
@@ -236,7 +210,7 @@ const handleSubmit = async () => {
                   </div>
 
                   {/* text length comparison */}
-                  <div className="apple-inset rounded-xl p-4 space-y-3">
+                  <div className="p-4 space-y-3">
                     <p className="text-footnote font-medium text-foreground-secondary">文字数</p>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-0.5">
@@ -269,12 +243,6 @@ const handleSubmit = async () => {
                               </span>
                               <span className="text-footnote text-foreground-secondary">{count}件 ({pct}%)</span>
                             </div>
-                            <div className="h-1.5 rounded-full bg-background-secondary overflow-hidden">
-                              <div
-                                className={['h-full rounded-full transition-all', TYPE_COLORS[type].replace('text-', 'bg-')].join(' ')}
-                                style={{ width: `${pct}%` }}
-                              />
-                            </div>
                           </div>
                         )
                       })}
@@ -294,13 +262,7 @@ const handleSubmit = async () => {
                             {styleFeatures.formalityScore}/10
                           </span>
                         </div>
-                        <div className="h-1.5 rounded-full bg-background-secondary overflow-hidden">
-                          <div
-                            className="h-full rounded-full bg-primary transition-all"
-                            style={{ width: `${styleFeatures.formalityScore * 10}%` }}
-                          />
-                        </div>
-                        <span className="inline-block text-caption1 px-2 py-0.5 rounded-full bg-primary/15 text-primary font-medium">
+                        <span className="inline-block text-caption1 px-2 py-0.5 font-medium text-foreground">
                           {styleFeatures.formalityLabel}
                         </span>
                       </div>
@@ -308,7 +270,7 @@ const handleSubmit = async () => {
                       {/* 文の長さ */}
                       <div className="flex items-center justify-between">
                         <span className="text-footnote text-foreground">文の長さ</span>
-                        <span className={['text-caption1 px-2 py-0.5 rounded-full font-medium', styleFeatures.sentenceLengthClass].join(' ')}>
+                        <span className="text-caption1 px-2 py-0.5 font-medium text-foreground">
                           {styleFeatures.sentenceLengthLabel}
                         </span>
                       </div>
@@ -316,7 +278,7 @@ const handleSubmit = async () => {
                       {/* 適書レベル */}
                       <div className="flex items-center justify-between">
                         <span className="text-footnote text-foreground">適書レベル</span>
-                        <span className={['text-caption1 px-2 py-0.5 rounded-full font-medium', styleFeatures.readabilityClass].join(' ')}>
+                        <span className="text-caption1 px-2 py-0.5 font-medium text-foreground">
                           {styleFeatures.readabilityLabel}
                         </span>
                       </div>
@@ -329,7 +291,7 @@ const handleSubmit = async () => {
                             {styleFeatures.foundPhrases.map((phrase) => (
                               <span
                                 key={phrase}
-                                className="text-caption1 px-2 py-0.5 rounded-full bg-background-secondary text-foreground-secondary"
+                                className="text-caption1 px-2 py-0.5 text-foreground-secondary"
                               >
                                 {phrase}
                               </span>
@@ -367,7 +329,7 @@ const handleSubmit = async () => {
         </div>
 
         {/* Right: result */}
-        <div className="apple-card p-5 min-h-[480px]">
+        <div className="p-5 min-h-[480px]">
           {result ? (
             <ProofreadResult result={result} onClear={handleClear} />
           ) : (

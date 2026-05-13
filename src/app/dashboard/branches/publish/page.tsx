@@ -61,10 +61,10 @@ export default function BranchPublishPage() {
         </p>
       </div>
 
-      <div className="apple-card p-6 space-y-5">
+      <div className="p-6 space-y-5">
         {success ? (
           <div className="flex flex-col items-center gap-3 py-6 text-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-500/15 text-green-400">
+            <div className="flex h-12 w-12 items-center justify-center">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <polyline points="20 6 9 17 4 12" />
               </svg>
@@ -78,7 +78,7 @@ export default function BranchPublishPage() {
               <label htmlFor="branch-name" className="text-footnote font-medium text-foreground-secondary">
                 Branch名
               </label>
-              <div className="flex items-center gap-3 rounded-[--radius] border border-border bg-background-tertiary px-3.5 py-2.5 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-colors">
+              <div className="flex items-center gap-3 px-3.5 py-2.5">
                 <span className="text-foreground-quaternary shrink-0">
                   <IconBranch />
                 </span>
@@ -102,14 +102,14 @@ export default function BranchPublishPage() {
               <button
                 type="submit"
                 disabled={submitting || !name.trim()}
-                className="flex items-center gap-2 rounded-[--radius] bg-primary px-5 py-2.5 text-subheadline font-semibold text-primary-foreground shadow-primary-glow hover:bg-primary/90 disabled:opacity-50 disabled:shadow-none transition-all"
+                className="flex items-center gap-2 px-5 py-2.5 text-subheadline font-semibold text-foreground disabled:opacity-50"
               >
                 {submitting ? <><IconSpinner />発行中…</> : '発行する'}
               </button>
               <button
                 type="button"
                 onClick={() => router.push('/dashboard/branches')}
-                className="rounded-[--radius] px-4 py-2.5 text-subheadline font-medium text-foreground-secondary hover:bg-fill-quaternary transition-colors"
+                className="px-4 py-2.5 text-subheadline font-medium text-foreground-secondary"
               >
                 キャンセル
               </button>

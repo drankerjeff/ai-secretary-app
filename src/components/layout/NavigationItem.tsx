@@ -16,21 +16,9 @@ export function NavigationItem({ href, label, icon, badge, isActive, onClick }: 
       href={href}
       onClick={onClick}
       aria-current={isActive ? 'page' : undefined}
-      className={[
-        'flex items-center gap-3 rounded-[--radius] px-3 py-2.5 text-subheadline font-medium min-h-[44px]',
-        'transition-colors duration-250 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]',
-        'outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
-        isActive
-          ? 'bg-fill text-foreground'
-          : 'text-foreground-secondary hover:bg-fill-quaternary hover:text-foreground',
-      ].join(' ')}
+      className="flex items-center gap-3 px-3 py-2.5 text-subheadline font-medium min-h-[44px] outline-none text-foreground"
     >
-      <span
-        className={[
-          'flex h-5 w-5 shrink-0 items-center justify-center',
-          isActive ? 'text-primary' : 'text-foreground-tertiary',
-        ].join(' ')}
-      >
+      <span className="flex h-5 w-5 shrink-0 items-center justify-center">
         {icon}
       </span>
 

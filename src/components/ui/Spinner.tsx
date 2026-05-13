@@ -12,12 +12,6 @@ const sizeMap: Record<NonNullable<SpinnerProps['size']>, string> = {
   lg: 'h-8 w-8 border-[3px]',
 }
 
-const colorMap: Record<NonNullable<SpinnerProps['color']>, string> = {
-  primary: 'border-primary/30 border-t-primary',
-  foreground: 'border-foreground/20 border-t-foreground',
-  muted: 'border-muted-foreground/20 border-t-muted-foreground',
-}
-
 const Spinner = React.forwardRef<HTMLSpanElement, SpinnerProps>(
   ({ size = 'md', color = 'primary', className = '' }, ref) => {
     return (
@@ -31,7 +25,7 @@ const Spinner = React.forwardRef<HTMLSpanElement, SpinnerProps>(
           className={[
             'rounded-full animate-spin',
             sizeMap[size],
-            colorMap[color],
+            'border-foreground/20 border-t-foreground',
           ].join(' ')}
         />
         <span className="sr-only">Loading...</span>

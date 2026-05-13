@@ -11,8 +11,6 @@ export interface AlertProps {
 
 const typeConfig = {
   info: {
-    container: 'bg-info/10 border-info/30 text-info',
-    accent: 'bg-info',
     icon: (
       <svg
         width="18"
@@ -34,8 +32,6 @@ const typeConfig = {
     role: 'status' as const,
   },
   success: {
-    container: 'bg-success/10 border-success/30 text-success',
-    accent: 'bg-success',
     icon: (
       <svg
         width="18"
@@ -56,8 +52,6 @@ const typeConfig = {
     role: 'status' as const,
   },
   warning: {
-    container: 'bg-warning/10 border-warning/30 text-warning-foreground',
-    accent: 'bg-warning',
     icon: (
       <svg
         width="18"
@@ -79,8 +73,6 @@ const typeConfig = {
     role: 'alert' as const,
   },
   error: {
-    container: 'bg-destructive/10 border-destructive/30 text-destructive',
-    accent: 'bg-destructive',
     icon: (
       <svg
         width="18"
@@ -113,20 +105,10 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
         role={config.role}
         aria-live={config.role === 'alert' ? 'assertive' : 'polite'}
         className={[
-          'relative flex gap-3 rounded-lg border pl-4 pr-4 py-3.5 overflow-hidden',
-          config.container,
+          'relative flex gap-3 pl-4 pr-4 py-3.5 overflow-hidden',
           className,
         ].join(' ')}
       >
-        {/* Left accent bar — color driven purely by CSS variable tokens */}
-        <span
-          className={[
-            'absolute left-0 top-0 bottom-0 w-1 rounded-l-lg',
-            config.accent,
-          ].join(' ')}
-          aria-hidden="true"
-        />
-
         {/* Icon */}
         <span className="mt-0.5 shrink-0">{config.icon}</span>
 
@@ -148,9 +130,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
               'shrink-0 self-center',
               'inline-flex items-center justify-center',
               'min-w-[44px] min-h-[44px]',
-              'rounded-lg hover:opacity-70',
-              'transition-opacity duration-250',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current',
+              'focus-visible:outline-none',
             ].join(' ')}
           >
             <svg

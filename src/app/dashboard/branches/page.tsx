@@ -17,17 +17,17 @@ interface Branch {
 // ---- Status badge ----
 
 function StatusBadge({ status }: { status: string }) {
-  const map: Record<string, { label: string; className: string }> = {
-    ACTIVE_HEALTHY: { label: '稼働中', className: 'bg-green-500/15 text-green-400' },
-    FUNCTIONS_DEPLOYED: { label: '準備完了', className: 'bg-blue-500/15 text-blue-400' },
-    CREATING: { label: '作成中', className: 'bg-amber-500/15 text-amber-400' },
-    COMING_UP: { label: '起動中', className: 'bg-amber-500/15 text-amber-400' },
-    GOING_DOWN: { label: '停止中', className: 'bg-foreground-tertiary/20 text-foreground-tertiary' },
-    INACTIVE: { label: '停止中', className: 'bg-foreground-tertiary/20 text-foreground-tertiary' },
+  const map: Record<string, { label: string }> = {
+    ACTIVE_HEALTHY: { label: '稼働中' },
+    FUNCTIONS_DEPLOYED: { label: '準備完了' },
+    CREATING: { label: '作成中' },
+    COMING_UP: { label: '起動中' },
+    GOING_DOWN: { label: '停止中' },
+    INACTIVE: { label: '停止中' },
   }
-  const s = map[status] ?? { label: status, className: 'bg-foreground-quaternary/20 text-foreground-quaternary' }
+  const s = map[status] ?? { label: status }
   return (
-    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-caption1 font-medium ${s.className}`}>
+    <span className="inline-flex items-center px-2.5 py-0.5 text-caption1 font-medium text-foreground-secondary">
       {s.label}
     </span>
   )
@@ -51,10 +51,10 @@ function BranchRow({ branch, onDelete }: { branch: Branch; onDelete: (id: string
   })
 
   return (
-    <div className="apple-card flex items-center gap-4 p-4">
+    <div className="flex items-center gap-4 p-4">
       {/* Branch icon */}
-      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[--radius] bg-fill">
-        <IconBranch className={branch.is_default ? 'text-primary' : 'text-foreground-secondary'} />
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center">
+        <IconBranch className="text-foreground-secondary" />
       </div>
 
       {/* Info */}
@@ -62,7 +62,7 @@ function BranchRow({ branch, onDelete }: { branch: Branch; onDelete: (id: string
         <div className="flex items-center gap-2 flex-wrap">
           <span className="text-body font-semibold text-foreground truncate">{branch.name}</span>
           {branch.is_default && (
-            <span className="rounded-full bg-primary/15 px-2 py-0.5 text-caption1 font-medium text-primary">
+            <span className="px-2 py-0.5 text-caption1 font-medium text-foreground-secondary">
               デフォルト
             </span>
           )}
@@ -82,13 +82,13 @@ function BranchRow({ branch, onDelete }: { branch: Branch; onDelete: (id: string
               <button
                 onClick={handleDelete}
                 disabled={deleting}
-                className="rounded-[--radius] bg-red-500/20 px-3 py-1.5 text-caption1 font-medium text-red-400 hover:bg-red-500/30 disabled:opacity-50 transition-colors"
+                className="px-3 py-1.5 text-caption1 font-medium text-foreground disabled:opacity-50"
               >
                 {deleting ? '削除中…' : '削除'}
               </button>
               <button
                 onClick={() => setConfirming(false)}
-                className="rounded-[--radius] bg-fill-quaternary px-3 py-1.5 text-caption1 font-medium text-foreground-secondary hover:bg-fill transition-colors"
+                className="px-3 py-1.5 text-caption1 font-medium text-foreground-secondary"
               >
                 キャンセル
               </button>
@@ -96,7 +96,7 @@ function BranchRow({ branch, onDelete }: { branch: Branch; onDelete: (id: string
           ) : (
             <button
               onClick={() => setConfirming(true)}
-              className="rounded-[--radius] p-2 text-foreground-quaternary hover:text-red-400 hover:bg-red-500/10 transition-colors"
+              className="p-2 text-foreground-quaternary"
               aria-label={`${branch.name} を削除`}
             >
               <IconTrash />
@@ -175,7 +175,7 @@ export default function BranchesPage() {
       </div>
 
       {/* Create form */}
-      <div className="apple-card p-5 space-y-3">
+      <div className="p-5 space-y-3">
         <h2 className="text-headline font-semibold text-foreground">新規Branch発行</h2>
         <form onSubmit={handleCreate} className="flex gap-3">
           <input
@@ -184,12 +184,12 @@ export default function BranchesPage() {
             onChange={e => setNewName(e.target.value)}
             placeholder="例: feature/new-ui"
             disabled={creating}
-            className="flex-1 rounded-[--radius] border border-border bg-background-tertiary px-3.5 py-2.5 text-body text-foreground placeholder:text-foreground-quaternary outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:opacity-50 transition-colors"
+            className="flex-1 px-3.5 py-2.5 text-body text-foreground bg-transparent outline-none disabled:opacity-50"
           />
           <button
             type="submit"
             disabled={creating || !newName.trim()}
-            className="flex items-center gap-2 rounded-[--radius] bg-primary px-4 py-2.5 text-subheadline font-semibold text-primary-foreground shadow-primary-glow hover:bg-primary/90 disabled:opacity-50 disabled:shadow-none transition-all"
+            className="flex items-center gap-2 px-4 py-2.5 text-subheadline font-semibold text-foreground disabled:opacity-50"
           >
             {creating ? (
               <>
@@ -219,7 +219,7 @@ export default function BranchesPage() {
           <button
             onClick={fetchBranches}
             disabled={loading}
-            className="flex items-center gap-1.5 rounded-[--radius] px-3 py-1.5 text-caption1 font-medium text-foreground-secondary hover:bg-fill-quaternary disabled:opacity-50 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-caption1 font-medium text-foreground-secondary disabled:opacity-50"
           >
             <IconRefresh className={loading ? 'animate-spin' : ''} />
             更新
@@ -232,14 +232,14 @@ export default function BranchesPage() {
             <span className="ml-2 text-subheadline">読み込み中…</span>
           </div>
         ) : error ? (
-          <div className="apple-card p-5 text-center space-y-2">
-            <p className="text-body text-red-400">{error}</p>
+          <div className="p-5 text-center space-y-2">
+            <p className="text-body text-foreground">{error}</p>
             <p className="text-caption1 text-foreground-tertiary">
               .env.local に SUPABASE_PROJECT_REF と SUPABASE_ACCESS_TOKEN が設定されているか確認してください
             </p>
           </div>
         ) : branches.length === 0 ? (
-          <div className="apple-card p-10 text-center text-foreground-tertiary text-subheadline">
+          <div className="p-10 text-center text-foreground-tertiary text-subheadline">
             Branchがありません
           </div>
         ) : (

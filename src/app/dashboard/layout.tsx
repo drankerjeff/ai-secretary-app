@@ -11,9 +11,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <AuthGuard>
-      <div className="flex h-full min-h-screen bg-background">
+      <div className="flex h-full min-h-screen">
         {/* Desktop sidebar */}
-        <aside className="hidden w-60 shrink-0 border-r border-border-subtle bg-background-elevated lg:block">
+        <aside className="hidden w-60 shrink-0 lg:block">
           <Sidebar />
         </aside>
 
@@ -24,7 +24,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="flex flex-1 flex-col min-w-0">
           <Header onMenuClick={() => setMobileOpen(true)} />
 
-          <main className="flex-1 overflow-auto p-6 animate-fade-in">
+          <main className="flex-1 overflow-auto p-6">
             {children}
           </main>
         </div>

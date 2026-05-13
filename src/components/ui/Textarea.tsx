@@ -82,14 +82,12 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           }
           onChange={handleChange}
           className={[
-            'w-full rounded-lg bg-background-secondary border',
+            'w-full bg-background-secondary',
             'text-callout text-foreground placeholder:text-foreground-tertiary',
             'px-3.5 py-2.5',
-            'transition-all duration-250 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]',
-            'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-0 focus:border-ring',
+            'focus:outline-none',
             'disabled:opacity-50 disabled:cursor-not-allowed',
             autoResize ? 'overflow-hidden resize-none' : 'resize-y',
-            hasError ? 'border-destructive' : 'border-border',
             className,
           ].join(' ')}
           {...props}

@@ -54,7 +54,7 @@ function TasksContent() {
             <h1 className="text-title1 font-semibold text-foreground">タスク管理</h1>
             {pendingCount > 0 && (
               <>
-                <span className="inline-flex items-center justify-center min-w-[26px] h-[26px] px-1.5 rounded-full bg-primary text-primary-foreground text-footnote font-semibold">
+                <span className="inline-flex items-center justify-center min-w-[26px] h-[26px] px-1.5 text-footnote font-semibold text-foreground">
                   {pendingCount}
                 </span>
                 <span className="text-callout text-foreground-secondary">残りのタスク</span>

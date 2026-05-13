@@ -80,7 +80,7 @@ export default function MinutesPage() {
         {/* Left column */}
         <div className="space-y-4">
           {/* Upload card */}
-          <div className="apple-card p-5 space-y-4">
+          <div className="p-5 space-y-4">
             <p className="text-subheadline font-semibold text-foreground">音声ファイルのアップロード</p>
             <AudioUploader
               onUpload={handleUpload}
@@ -98,7 +98,7 @@ export default function MinutesPage() {
           )}
 
           {/* Minutes list */}
-          <div className="apple-card p-5 space-y-3">
+          <div className="p-5 space-y-3">
             <p className="text-subheadline font-semibold text-foreground">議事録一覧</p>
             <MinutesList
               minutes={minutes}
@@ -111,7 +111,7 @@ export default function MinutesPage() {
         </div>
 
         {/* Right column */}
-        <div className="apple-card p-5 min-h-[480px]">
+        <div className="p-5 min-h-[480px]">
           {displayedDocument && displayedDocument.status === 'completed' ? (
             <MinutesDisplay
               minutes={displayedDocument}

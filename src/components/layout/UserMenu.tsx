@@ -77,7 +77,7 @@ export function UserMenu() {
         aria-expanded={open}
         aria-haspopup="menu"
         aria-label="ユーザーメニューを開く"
-        className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground text-subheadline font-semibold transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 outline-none"
+        className="flex h-9 w-9 items-center justify-center text-subheadline font-semibold outline-none"
       >
         {initials}
       </button>
@@ -86,10 +86,10 @@ export function UserMenu() {
         <div
           role="menu"
           aria-label="ユーザーメニュー"
-          className="absolute right-0 top-11 z-50 w-56 overflow-hidden rounded-[--radius-lg] border border-border-subtle shadow-lg apple-glass"
+          className="absolute right-0 top-11 z-50 w-56 overflow-hidden"
         >
           {/* User info */}
-          <div className="border-b border-border-subtle px-4 py-3">
+          <div className="px-4 py-3">
             <p className="text-subheadline font-semibold text-foreground">
               {displayName ?? email ?? 'ユーザー'}
             </p>
@@ -104,18 +104,18 @@ export function UserMenu() {
               href="/dashboard/settings"
               role="menuitem"
               onClick={() => setOpen(false)}
-              className="flex items-center gap-3 px-4 py-2.5 text-subheadline text-foreground-secondary hover:bg-fill-quaternary hover:text-foreground transition-colors outline-none focus-visible:bg-fill-quaternary"
+              className="flex items-center gap-3 px-4 py-2.5 text-subheadline text-foreground-secondary outline-none"
             >
               <IconSettings />
               設定
             </Link>
           </div>
 
-          <div className="border-t border-border-subtle py-1">
+          <div className="py-1">
             <button
               role="menuitem"
               onClick={handleSignOut}
-              className="flex w-full items-center gap-3 px-4 py-2.5 text-subheadline text-destructive hover:bg-destructive/10 transition-colors outline-none focus-visible:bg-destructive/10"
+              className="flex w-full items-center gap-3 px-4 py-2.5 text-subheadline text-destructive outline-none"
             >
               <IconLogOut />
               ログアウト
